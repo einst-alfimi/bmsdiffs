@@ -223,5 +223,120 @@
     "title": "ダークサンバランド -LAST BOSS-",
     "md5": "ebc5946c3de24a01048d1c90cbd5c9d6",
     "level": "24"
+  },
+  {
+    "title": "cold planet (LN Maniac)",
+    "md5": "8ef3f9e1852e42fea8ac62e7e5d7619c",
+    "level": "?",
+    "url_diff": "cold_sr3_ln.bms"
+  },
+  {
+    "title": "cold planet (Oceanfront City Remix) [Osarafront city]",
+    "md5": "352b1ad6961e8aaf92789bc0033d74c8",
+    "level": "?",
+    "url_diff": "oceanfront_city_7osara.bme"
+  },
+  {
+    "title": "cold planet (Oceanfront City Remix) [Osarafront city EX]",
+    "md5": "4b6ca9e1b18e5a2fe47ba126ed78b4b8",
+    "level": "?",
+    "url_diff": "oceanfront_city_7osaraex.bme"
+  },
+  {
+    "title": "E reviver -imaging you- [LN Another]",
+    "md5": "74d0933b742237b04600bc6b40247759",
+    "level": "?",
+    "url_diff": "e rev_sr3.bme"
+  },
+  {
+    "title": "E reviver -imaging you- [LN Maniac]",
+    "md5": "35ac8c6ed5fb0464917fa3357ebe55b0",
+    "level": "?",
+    "url_diff": "e rev_sr3+.bme"
+  },
+  {
+    "title": "Endless Journey [7key//LNManiac]",
+    "md5": "20692e30411de80576f8e6558a42a26f",
+    "level": "?",
+    "url_diff": "ej7LN.bms"
+  },
+  {
+    "title": "Endless Journey [7key//LNManiac-]",
+    "md5": "65fffd001c77a54513ea8e51fca5ad81",
+    "level": "?",
+    "url_diff": "ej7LN-.bms"
+  },
+  {
+    "title": "flowers [^p^]",
+    "md5": "c7a4d13dbce615b12cddc90047e29a7f",
+    "level": "?",
+    "url_diff": "00_flowers_sr3.bms"
+  },
+  {
+    "title": "Nether -LN ANOTHER-",
+    "md5": "8bd33d8649c1775eb807a6a223350729",
+    "level": "?",
+    "url_diff": "Nether(LN).bms"
+  },
+  {
+    "title": "Nether -LN MANIAC-",
+    "md5": "3cf5964836ed6c1441bb3de748665d64",
+    "level": "?",
+    "url_diff": "Nether(LN+).bms"
+  },
+  {
+    "title": "Trinity [LN Another]",
+    "md5": "c76a0e0e2980479bd2b3b6120db1fd3e",
+    "level": "?",
+    "url_diff": "trinity_ln_another.bme"
+  },
+  {
+    "title": "Wonder Bullfighter～A Barcelona cuando florece la lira～ [LN ANOTHER]",
+    "md5": "92ce69edd2c70cf5d9dbca2bcde4c5b0",
+    "level": "?",
+    "url_diff": "wonder7LN.bme"
+  },
+  {
+    "title": "Wonder Bullfighter～A Barcelona cuando florece la lira～ [LN MANIAC]",
+    "md5": "9604fb83176ba70af9494f9fd01c9a60",
+    "level": "?",
+    "url_diff": "wonder7LN+.bme"
+  },
+  {
+    "title": "アンパンマンのポップコーン作るやつ [SP ANOTHER]",
+    "md5": "ecc54645b7267fb50df15ba68b96fc19",
+    "level": "?",
+    "url_diff": "_SP_ANOTHER.bme"
+  },
+  {
+    "title": "景色の境界 -LN ANOTHER-",
+    "md5": "c65c31533e7ade5c9a3af80b7fe1c09c",
+    "level": "?",
+    "url_diff": "kesiki_lnx.bme"
+  },
+  {
+    "title": "景色の境界 -LN ANOTHER+-",
+    "md5": "b92de40df281aa317b80f65038cbc6d8",
+    "level": "?",
+    "url_diff": "kesiki_lnx+.bme"
+  },
+  {
+    "title": "叔父貴 [LN ANOTHER]",
+    "md5": "d8b0069ae0e29f6af8ff7e8a7a3184ce",
+    "level": "?",
+    "url_diff": "ojiki_l.bme"
+  },
+  {
+    "title": "足ツブテと足ーク [ANOTHER]",
+    "md5": "eab6223b57dff7dca919f24529ffc03d",
+    "level": "?",
+    "url_diff": "another.bms"
+  },
+  {
+    "title": "足ツブテと足ーク [炭]",
+    "md5": "f9f45227922876d0bf69519cda54c0b9",
+    "level": "?",
+    "url_diff": "carbon.bms"
   }
+
 ]

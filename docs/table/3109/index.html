@@ -5,7 +5,7 @@
 <title>お皿が未熟難易度表</title>
 <meta charset="UTF-8">
 <meta name="bmstable" content="./head.json" />
-<link href="style.css" rel="stylesheet" type="text/css" media="screen,print" />
+<link href="./style.css" rel="stylesheet" type="text/css" media="screen,print" />
 <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -88,9 +88,9 @@ function makeBMSTable(info, mark) {
         // 差分
         if(info[i].url_diff != null) {
         	if(info[i].name_diff != null) {
-	        $("<td width='10%'><a href='" + info[i].url_diff + "'>" + info[i].name_diff + "</a></td>").appendTo(str);
+	        $("<td width='10%'><a href='./bms/" + info[i].url_diff + "' download>" + info[i].name_diff + "</a></td>").appendTo(str);
         	} else {
-	        $("<td width='10%'><a href='" + info[i].url_diff + "'>" + info[i].url_diff + "</a></td>").appendTo(str);
+	        $("<td width='10%'><a href='./bms/" + info[i].url_diff + "' download>" + info[i].url_diff + "</a></td>").appendTo(str);
         	}
         } else {
         	if(info[i].name_diff != null) {
