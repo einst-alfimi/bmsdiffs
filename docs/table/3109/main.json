@@ -6,7 +6,7 @@
   },
   {
     "title": "Phantom of spring [^o^]",
-    "md5": "57d29841ba8c302760afa617ed51af6b",
+    "md5": "5c28c61db311a0d3c6e1c0aa9c3f849f",
     "level": "1"
   },
   {
@@ -21,7 +21,7 @@
   },
   {
     "title": "なんじゃ村ほいほ～い[AFOTHER+]",
-    "md5": "28fbda05183d50451907b2387ee2d872",
+    "md5": "50c7937eb8cf1fa7a1ecfb4a8ac4fd3e",
     "level": "3"
   },
   {
@@ -36,17 +36,17 @@
   },
   {
     "title": "Beatrice [MANIAC]",
-    "md5": "865c8d6cb86bcef1cbda685b66e75aff",
+    "md5": "64f67cb5e24408f00f85e06c25117a32",
     "level": "8"
   },
   {
     "title": "パッパララッパー[MANIAC]",
-    "md5": "6ba5f5239306729e84a25afe7dc92a98",
+    "md5": "fc09d62b2237ec1fdae8020d82ada754",
     "level": "10"
   },
   {
     "title": "パッパララッパー[MANIAC-]",
-    "md5": "9b7e6e663a260169e0a919c32dba1392",
+    "md5": "81a0b10a6c175f2556e2316868f3d8ea",
     "level": "10"
   },
   {
@@ -56,7 +56,12 @@
   },
   {
     "title": "Shiratsuyu [鹿]",
-    "md5": "29df71216eed38666384022994349ce9",
+    "md5": "8879cf9a0a9655b7114d13cec6481a3f",
+    "level": "12"
+  },
+  {
+    "title": "Summerland [7key Maniac]",
+    "md5": "b054eb55c4473705554a3d8d21896922",
     "level": "12"
   },
   {
@@ -66,12 +71,17 @@
   },
   {
     "title": "KYOTO-HOT [ANOTHER]",
-    "md5": "490c31f2d9cca0d60adf1391bceec196",
+    "md5": "5c6f58d789af8f699dfbd94cb3d95713",
     "level": "14"
   },
   {
     "title": "Here we go！(TM edit) [^p^]",
-    "md5": "0008e3bee49cbe2456f1666cb23905ad",
+    "md5": "0f0fb017e2a575a8de35f3ffcd8aee10",
+    "level": "15"
+  },
+  {
+    "title": "スクラッチマニア！このゆびとまれ！",
+    "md5": "f0e849a7d2266bd4d6cd6246f764835d",
     "level": "15"
   },
   {
@@ -96,7 +106,7 @@
   },
   {
     "title": "OSARA magic!! [BLACK ANOTHER]",
-    "md5": "9c13371c47e455c62e7c388076291aeb",
+    "md5": "33c21d04ac761cc4b73d5989d0877116",
     "level": "18"
   },
   {
@@ -116,7 +126,7 @@
   },
   {
     "title": "ラブラブ79.99%急接近！？ ～となりのカレはノコギリ波☆～  [MANIAC]",
-    "md5": "57bf43a8a2a85ae8b873999e20339757",
+    "md5": "f911bf153bc53b38ac05afb7c9b8b3f8",
     "level": "19"
   },
   {
@@ -126,17 +136,17 @@
   },
   {
     "title": "marginated [^p^]",
-    "md5": "fc22e2cd89a7b158636789fbaa039f85",
+    "md5": "28aded7df8a910b7ca3416274bbcad97",
     "level": "20"
   },
   {
     "title": "ON THE DiSH -enoshima style- [BLACK ANOTHER]",
-    "md5": "317430360f838ef375ed25a2abb70d04",
+    "md5": "e0265c49f6218c6196197131d2b4cecf",
     "level": "20"
   },
   {
     "title": "空跳ぶ少女 [EXTREME7]",
-    "md5": "27f41e2b85e4330a3f7c10baddef9151",
+    "md5": "81ae4a7752a9c0293d595b0bf0e27309",
     "level": "20"
   },
   {
@@ -146,17 +156,17 @@
   },
   {
     "title": "Epatoivo LdsRmx [皿うどん]",
-    "md5": "feb9816520194714a99ff45d92c6758b",
+    "md5": "c996def7c61ada41159b9b20c831d171",
     "level": "21"
   },
   {
     "title": "絶対的共依存-Codependence-",
-    "md5": "20105c9e4b811b2d78d39c05ec290c70",
+    "md5": "3cc376adecd0e196a34a12eb39311146",
     "level": "21"
   },
   {
     "title": "恋愛には奥手だが、そのぶん耳の穴を広げてしまう耳穴系男子 [BEGINNER]",
-    "md5": "4bedc775292d403be047ccc5457a6b09",
+    "md5": "ae12c478ad5ec374f6ba470ab672c195",
     "level": "21"
   },
   {
@@ -171,7 +181,7 @@
   },
   {
     "title": "オルゴオル☆ディレイ",
-    "md5": "f1be1f876cf020d34008006552ff51be",
+    "md5": "969d51c2d2e34bf07cef084c9ce78bcc",
     "level": "22"
   },
   {
@@ -191,12 +201,12 @@
   },
   {
     "title": "お前らどうせ「今回も『JUMP』とか『跳』とか関連の単語をタイトルの中に入れるんだろうなー」とか期待していたんだろう？残念だがそう何度もJUMPネタで行くと思うなよ！俺だってそう何度もJUMP、JUMP言い続けたら飽きられるってことぐらい分かってるんだ！JUMPって言い続けた結果、JUMP本来の単語の意味が薄まるなんて状況にさせてたまるか！！！！(BMS edit)",
-    "md5": "b3075a277e8c04ced0384ab51dc6ad9f",
+    "md5": "ac2ed62daa434c186da67dce788437aa",
     "level": "23"
   },
   {
     "title": "サンバランド -LAST BOSS-",
-    "md5": "2ced2e1127a66a2d23deb0319c1e027c",
+    "md5": "093a8d66b89944db9e42aa2321b4f637",
     "level": "23"
   },
   {
@@ -206,12 +216,12 @@
   },
   {
     "title": "Shiratsuyu [ハシュ]",
-    "md5": "406be8f73fa0f6bd411246abb1b7fc54",
+    "md5": "5b411cd3fc7481bad67d452137c6c259",
     "level": "24"
   },
   {
     "title": "ダークサンバランド -LAST BOSS-",
-    "md5": "71b8cd30734abd651c7470abea31333b",
+    "md5": "ebc5946c3de24a01048d1c90cbd5c9d6",
     "level": "24"
   }
 ]
