@@ -18,13 +18,33 @@
 </table>
 </div>
 <script language="javascript" type="text/javascript">
-$(document).ready(function(){
-	$.getJSON($("meta[name=bmstable]").attr("content"), function(header){
-		$.getJSON(header.data_url, function(information){
-			makeBMSTable(information,header.symbol);
-		});
-	});
+// $(document).ready(function(){
+// 	$.getJSON($("meta[name=bmstable]").attr("content"), function(header){
+// 		$.getJSON(header.data_url, function(information){
+// 			makeBMSTable(information,header.symbol);
+// 		});
+// 	});
+// });
+const getJson = (url, fn) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = () => {
+        let responseJson = JSON.parse(xhr.response);
+        fn(responseJson);
+    }
+    xhr.send();
+}
+const getTableData = (res) => {
+    getJson(res.data_url, (infomation) => {
+        makeBMSTable(infomation, res.symbol)
+    });
+}
+
+window.addEventListener('load', (event) => {
+    const description_url = document.getElementsByName('bmstable')[0].content;
+    getJson(description_url, getTableData);
 });
+
 
 function makeBMSTable(info, mark) {
     var x = "";
@@ -99,7 +119,8 @@ function makeBMSTable(info, mark) {
         	}
         }
         // コメント
-        $("<td width='15%'>" + current.comment + "</td>").appendTo(str);
+        const comment = current.comment ? current.comment : '';
+        $("<td width='15%'>" + comment + "</td>").appendTo(str);
         str.appendTo(obj);
         count++;
 
