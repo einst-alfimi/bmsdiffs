@@ -25,10 +25,38 @@ const getTableData = (res) => {
         makeBMSTable(infomation, res.symbol)
     });
 }
+
 window.addEventListener('load', (event) => {
     const description_url = document.getElementsByName('bmstable')[0].content;
     getJson(description_url, getTableData);
 });
+
+const makeTableHeader = (table_elem) => {
+    const header = document.createElement('tr');
+    header.setAttribute('height', '20');
+    header.setAttribute('style', 'color:white;background-color:#666666')
+    const level = document.createElement('td');
+    level.setAttribute('align', 'center');
+    level.textContent('LV');
+    header.appendChild(level);
+    const title = document.createElement('td');
+    title.setAttribute('align', 'center');
+    title.textContent('タイトル');
+    header.appendChild(title);
+    const orig = document.createElement('td');
+    orig.setAttribute('align', 'center');
+    orig.textContent('本体');
+    header.appendChild(orig);
+    const diffs = document.createElement('td');
+    diffs.setAttribute('align', 'center');
+    diffs.textContent('差分');
+    header.appendChild(diffs);
+    const comment = document.createElement('td');
+    comment.setAttribute('align', 'center');
+    comment.textContent('コメント');
+    header.appendChild(comment);
+    table_elem.appendChild(header);
+}
 
 // 表生成処理
 const makeBMSTable = (info, mark) => {
@@ -97,7 +125,7 @@ const makeBMSTable = (info, mark) => {
         level_array[current.level].push(line);
     });
 
-    // const level_map = new Map([level_array]);
+    // TODO ここ最悪
     Object.keys(level_array).map((level_label) => {
         levels = level_array[level_label];
         console.log(level_label)
