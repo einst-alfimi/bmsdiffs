@@ -9,22 +9,8 @@
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
-<body class="diff">
-<p style="color:#ffffee">お皿が未熟難易度表</p>
-<p style="color:#ffffee">代理です</p>
-<!--　　　　　ここから難易度表本体　　　　　-->
-<div class="tableflame">
-<table align="center" cellspacing="1" cellpadding=2　border="0" bgcolor="#000000" id="table_int">
-</table>
-</div>
 <script language="javascript" type="text/javascript">
-// $(document).ready(function(){
-// 	$.getJSON($("meta[name=bmstable]").attr("content"), function(header){
-// 		$.getJSON(header.data_url, function(information){
-// 			makeBMSTable(information,header.symbol);
-// 		});
-// 	});
-// });
+// 取得処理
 const getJson = (url, fn) => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
@@ -39,14 +25,13 @@ const getTableData = (res) => {
         makeBMSTable(infomation, res.symbol)
     });
 }
-
 window.addEventListener('load', (event) => {
     const description_url = document.getElementsByName('bmstable')[0].content;
     getJson(description_url, getTableData);
 });
 
-
-function makeBMSTable(info, mark) {
+// 表生成処理
+const makeBMSTable = (info, mark) => {
     var x = "";
     var ev = "";
     var count = 0;
@@ -59,7 +44,7 @@ function makeBMSTable(info, mark) {
         // 難度ごとの区切り
         if (x != current.level) {
             // 前の区切りに譜面数、平均密度を追加
-          	if (obj_sep != null) {
+                if (obj_sep != null) {
                 obj_sep.html("<td colspan='6' align='center'>" + "<b>" + mark + x + " (" + count + "譜面)</b></td>");
             }
             obj_sep = $("<tr class='tr_separate' id='" + mark + current.level + "'></tr>");
@@ -82,41 +67,40 @@ function makeBMSTable(info, mark) {
         // アーティスト
         var astr = "";
         if(current.url != null) {
-        	if(current.artist != null) {
-        		astr = "<a href='" + current.url + "'>" + current.artist + "</a>";
-        	} else {
-        		astr = "<a href='" + current.url + "'>" + current.url + "</a>";
-        	}
+            if(current.artist != null) {
+                astr = "<a href='" + current.url + "'>" + current.artist + "</a>";
+            } else {
+                astr = "<a href='" + current.url + "'>" + current.url + "</a>";
+            }
         } else {
-        	if(current.artist != null) {
-        		astr = current.artist;
-        	}
+            if(current.artist != null) {
+                astr = current.artist;
+            }
         }
+        // 多分本体情報
         if(current.url_pack != null) {
-        	if(current.name_pack != null) {
-        		astr += "<br />(<a href='" + current.url_pack + "'>" + current.name_pack + "</a>)";
-        	} else {
-        		astr += "<br />(<a href='" + current.url_pack + "'>" + current.url_pack + "</a>)";
-        	}
+            if(current.name_pack != null) {
+                astr += "<br />(<a href='" + current.url_pack + "'>" + current.name_pack + "</a>)";
+            } else {
+                astr += "<br />(<a href='" + current.url_pack + "'>" + current.url_pack + "</a>)";
+            }
         } else {
-        	if(current.name_pack != null) {
-        		astr += "<br />(" + current.name_pack + ")";
-        	}
+            if(current.name_pack != null) {
+                astr += "<br />(" + current.name_pack + ")";
+            }
         }
         $("<td width='20%'>" + astr + "</td>").appendTo(str);
         // 差分
         if(current.url_diff != null) {
-        	if(current.name_diff != null) {
-	        $("<td width='10%'><a href='./bms/" + current.url_diff + "' download>" + current.name_diff + "</a></td>").appendTo(str);
-        	} else {
-	        $("<td width='10%'><a href='./bms/" + current.url_diff + "' download>" + current.url_diff + "</a></td>").appendTo(str);
-        	}
+            const download_url = current.url_diff ? current.url_diff.replace(/^(_*)?/, '') : '';
+            const name         = current.name_diff ? current.name_diff : current.url_diff;
+            $("<td width='10%'><a href='./bms/" + download_url + "' download='"+current.url_diff+"'>" + name + "</a></td>").appendTo(str);
         } else {
-        	if(current.name_diff != null) {
-	        $("<td width='10%'>" + current.name_diff + "</td>").appendTo(str);
-        	} else {
-	        $("<td width='10%'></td>").appendTo(str);
-        	}
+            if(current.name_diff != null) {
+            $("<td width='10%'>" + current.name_diff + "</td>").appendTo(str);
+            } else {
+            $("<td width='10%'></td>").appendTo(str);
+            }
         }
         // コメント
         const comment = current.comment ? current.comment : '';
@@ -131,5 +115,14 @@ function makeBMSTable(info, mark) {
     }
 }
 </script>
+</head>
+<body class="diff">
+<p style="color:#ffffee">お皿が未熟難易度表</p>
+<p style="color:#ffffee">代理です</p>
+<div class="tableflame">
+<table align="center" cellspacing="1" cellpadding="2" border="0" bgcolor="#000000" id="table_int">
+</table>
+</div>
+
 </body>
 </html>
