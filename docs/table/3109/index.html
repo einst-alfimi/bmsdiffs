@@ -97,6 +97,7 @@ const makeBMSTable = (info, mark) => {
             const orig_link = document.createElement('a');
             orig_link.setAttribute('href', current.url);
             orig_link.setAttribute('target','_blank');
+            orig_link.textContent = 'ダウンロード';
             orig_url.appendChild(orig_link);
         }
         line.appendChild(orig_url);
@@ -108,7 +109,7 @@ const makeBMSTable = (info, mark) => {
             const diff_link    = document.createElement('a');
             diff_link.setAttribute('href', `./bms/${download_url}`);
             diff_link.setAttribute('download', `${current.url_diff}`);
-            diff_link.textContent = name;
+            diff_link.textContent = '差分ダウンロード';
             diff_url.appendChild(diff_link);
         } else {
             const name = current.name_diff ? current.name_diff : '';
