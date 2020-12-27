@@ -38,6 +38,7 @@ const makeBMSTable = (info, mark) => {
     var obj = $("#table_int");
     // 表のクリア
     obj.html("");
+    // テーブルヘッダ
     $("<tr height='20' style='color:white;background-color:#666666'><td align='center'>LV</td><td align='center'>タイトル</td><td align='center'>本体</td><td align='center'>差分</td><td align='center'>コメント</td></tr>").appendTo(obj);
     var obj_sep = null;
     info.forEach((current, i) => {
@@ -61,50 +62,28 @@ const makeBMSTable = (info, mark) => {
         str = $("<tr class='tr_update'></tr>");
         }
         // レベル表記
-        $("<td width='5%'>" + mark + x + "</td>").appendTo(str);
+        const level = mark + x;
+        $(`<td width='5%'>${level}</td>`).appendTo(str);
         // タイトル
         $("<td width='20%'>" + "<a href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=" + current.md5 + "' target='_blank'>" + current.title + "</a></td>").appendTo(str);
-        // アーティスト
-        var astr = "";
-        if(current.url != null) {
-            if(current.artist != null) {
-                astr = "<a href='" + current.url + "'>" + current.artist + "</a>";
-            } else {
-                astr = "<a href='" + current.url + "'>" + current.url + "</a>";
-            }
+        // 本体情報
+        if (current.url) {
+            $(`<td width='20%'><a href='${current.url}' target='_blank'>DL</a></td>`).appendTo(str);
         } else {
-            if(current.artist != null) {
-                astr = current.artist;
-            }
+            $("<td width='20%'></td>").appendTo(str);
         }
-        // 多分本体情報
-        if(current.url_pack != null) {
-            if(current.name_pack != null) {
-                astr += "<br />(<a href='" + current.url_pack + "'>" + current.name_pack + "</a>)";
-            } else {
-                astr += "<br />(<a href='" + current.url_pack + "'>" + current.url_pack + "</a>)";
-            }
-        } else {
-            if(current.name_pack != null) {
-                astr += "<br />(" + current.name_pack + ")";
-            }
-        }
-        $("<td width='20%'>" + astr + "</td>").appendTo(str);
         // 差分
         if(current.url_diff != null) {
-            const download_url = current.url_diff ? current.url_diff.replace(/^(_*)?/, '') : '';
+            const download_url = current.url_diff.replace(/^(_*)?/, ''); // アンスコ対応
             const name         = current.name_diff ? current.name_diff : current.url_diff;
-            $("<td width='10%'><a href='./bms/" + download_url + "' download='"+current.url_diff+"'>" + name + "</a></td>").appendTo(str);
+            $(`<td width='10%'><a href='./bms/${download_url}' download='${current.url_diff}'>${name}</a></td>`).appendTo(str);
         } else {
-            if(current.name_diff != null) {
-            $("<td width='10%'>" + current.name_diff + "</td>").appendTo(str);
-            } else {
-            $("<td width='10%'></td>").appendTo(str);
-            }
+            const name = current.name_diff ? current.name_diff : '';
+            $(`<td width='10%'>${name}</td>`).appendTo(str);
         }
         // コメント
         const comment = current.comment ? current.comment : '';
-        $("<td width='15%'>" + comment + "</td>").appendTo(str);
+        $(`<td width='15%'>${comment}</td>`).appendTo(str);
         str.appendTo(obj);
         count++;
 
