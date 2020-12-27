@@ -33,61 +33,91 @@ window.addEventListener('load', (event) => {
 // 表生成処理
 const makeBMSTable = (info, mark) => {
     let x = "";
-    let count = 0;
-    let obj = $("#table_int");
-    // 表のクリア
-    obj.html("");
+    const table_elem = document.getElementById("table_int");
+    table_elem.innerHTML = ''; // 表のクリア
     // テーブルヘッダ
-    $("<tr height='20' style='color:white;background-color:#666666'><td align='center'>LV</td><td align='center'>タイトル</td><td align='center'>本体</td><td align='center'>差分</td><td align='center'>コメント</td></tr>").appendTo(obj);
-    var obj_sep = null;
+    makeTableHeader(table_elem);
+    let obj_sep = null;
+    let level_array = [];
     info.forEach((current, i) => {
-        // 難度ごとの区切り
-        if (x != current.level) {
-            // 前の区切りに譜面数、平均密度を追加
-                if (obj_sep != null) {
-                obj_sep.html("<td colspan='6' align='center'>" + "<b>" + mark + x + " (" + count + "譜面)</b></td>");
-            }
-            obj_sep = $("<tr class='tr_separate' id='" + mark + current.level + "'></tr>");
-            obj_sep.appendTo(obj);
-            count = 0;
-            x = current.level; // クソ実装すぎ
-        }
         // 本文
         const status_class = current.state == 1 ? 'tr_new'
                            : current.state == 2 ? 'tr_update'
                            : 'tr_normal';
-        const str = $(`<tr class='${status_class}'></tr>`);
+        const line = document.createElement('tr');
+        line.setAttribute('class', status_class)
         // レベル表記
-        const level = mark + x;
-        $(`<td width='5%'>${level}</td>`).appendTo(str);
+        const level = document.createElement('td');
+        level.setAttribute('width', '5%') // TODO レガシーなので治す
+        level.textContent = mark + current.level;
+        line.appendChild(level);
         // タイトル
-        $("<td width='20%'>" + "<a href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=" + current.md5 + "' target='_blank'>" + current.title + "</a></td>").appendTo(str);
+        const title = document.createElement('td');
+        title.setAttribute('width', '20%') // TODO レガシーなので治す
+        const ir_elem = document.createElement('a');
+        ir_elem.textContent = current.title;
+        ir_elem.setAttribute('href',`http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=${current.md5}`);
+        ir_elem.setAttribute('target','_blank');
+        title.appendChild(ir_elem);
+        line.appendChild(title);
         // 本体情報
+        const orig_url = document.createElement('td');
+        orig_url.setAttribute('width', '20%') // TODO レガシーなので治す
         if (current.url) {
-            $(`<td width='20%'><a href='${current.url}' target='_blank'>DL</a></td>`).appendTo(str);
-        } else {
-            $("<td width='20%'></td>").appendTo(str);
+            const orig_link = document.createElement('a');
+            orig_link.setAttribute('href', current.url);
+            orig_link.setAttribute('target','_blank');
+            orig_url.appendChild(orig_link);
         }
+        line.appendChild(orig_url);
         // 差分
+        const diff_url = document.createElement('td');
+        diff_url.setAttribute('width', '10%') // TODO レガシーなので治す
         if(current.url_diff != null) {
             const download_url = current.url_diff.replace(/^(_*)?/, ''); // アンスコ対応
             const name         = current.name_diff ? current.name_diff : current.url_diff;
-            $(`<td width='10%'><a href='./bms/${download_url}' download='${current.url_diff}'>${name}</a></td>`).appendTo(str);
+            const diff_link    = document.createElement('a');
+            diff_link.setAttribute('href', `./bms/${download_url}`);
+            diff_link.setAttribute('download', `${current.url_diff}`);
+            diff_url.appendChild(diff_link);
         } else {
             const name = current.name_diff ? current.name_diff : '';
-            $(`<td width='10%'>${name}</td>`).appendTo(str);
+            diff_url.textContent(name);
         }
+        line.appendChild(diff_url);
         // コメント
-        const comment = current.comment ? current.comment : '';
-        $(`<td width='15%'>${comment}</td>`).appendTo(str);
-        str.appendTo(obj);
-        count++;
+        const comment = document.createElement('td');
+        comment.setAttribute('width', '15%') // TODO レガシーなので治す
+        comment.textContent = current.comment ? current.comment : '';
+        line.appendChild(comment);
 
+        if(!level_array[current.level]){
+            level_array[current.level] = [];
+        }
+        level_array[current.level].push(line);
     });
-    // 最後の区切り処理
-    if (obj_sep != null) {
-        obj_sep.html("<td colspan='6' align='center'>" + "<b>" + mark + x + " (" + count + "譜面)</b></td>");
-    }
+
+    // const level_map = new Map([level_array]);
+    Object.keys(level_array).map((level_label) => {
+        levels = level_array[level_label];
+        console.log(level_label)
+        // 区切り文生成
+        const levelHead = document.createElement('td');
+        levelHead.setAttribute('colspan', '5');
+        levelHead.setAttribute('align', 'center');
+        const levelHeadLabel = document.createElement('b');
+        levelHeadLabel.textContent = `${mark+level_label}(${levels.length}譜面)`;
+        levelHead.appendChild(levelHeadLabel);
+        obj_seq = document.createElement('tr');
+        obj_seq.setAttribute('class', 'tr_separate');
+        obj_seq.setAttribute('id', mark+level_label);
+        obj_seq.appendChild(levelHead);
+        table_elem.appendChild(obj_seq);
+        // 譜面行生成
+        levels.forEach((item) => { 
+            table_elem.appendChild(item);
+        });
+    });
 }
 </script>
 </head>
