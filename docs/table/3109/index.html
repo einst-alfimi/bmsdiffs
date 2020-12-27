@@ -38,27 +38,27 @@ const makeTableHeader = (table_elem) => {
     const level = document.createElement('td');
     level.setAttribute('align', 'center');
     level.setAttribute('width', '5%') // TODO レガシーなので治す
-    level.textContent('LV');
+    level.textContent = 'LV';
     header.appendChild(level);
     const title = document.createElement('td');
     title.setAttribute('align', 'center');
     title.setAttribute('width', '20%') // TODO レガシーなので治す
-    title.textContent('タイトル');
+    title.textContent = 'タイトル';
     header.appendChild(title);
     const orig = document.createElement('td');
     orig.setAttribute('align', 'center');
     orig.setAttribute('width', '20%') // TODO レガシーなので治す
-    orig.textContent('本体');
+    orig.textContent = '本体';
     header.appendChild(orig);
     const diffs = document.createElement('td');
     diffs.setAttribute('align', 'center');
     diffs.setAttribute('width', '10%') // TODO レガシーなので治す
-    diffs.textContent('差分');
+    diffs.textContent = '差分';
     header.appendChild(diffs);
     const comment = document.createElement('td');
     comment.setAttribute('align', 'center');
     comment.setAttribute('width', '15%') // TODO レガシーなので治す
-    comment.textContent('コメント');
+    comment.textContent = 'コメント';
     header.appendChild(comment);
     table_elem.appendChild(header);
 }
