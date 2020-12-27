@@ -37,22 +37,27 @@ const makeTableHeader = (table_elem) => {
     header.setAttribute('style', 'color:white;background-color:#666666')
     const level = document.createElement('td');
     level.setAttribute('align', 'center');
+    level.setAttribute('width', '5%') // TODO レガシーなので治す
     level.textContent('LV');
     header.appendChild(level);
     const title = document.createElement('td');
     title.setAttribute('align', 'center');
+    title.setAttribute('width', '20%') // TODO レガシーなので治す
     title.textContent('タイトル');
     header.appendChild(title);
     const orig = document.createElement('td');
     orig.setAttribute('align', 'center');
+    orig.setAttribute('width', '20%') // TODO レガシーなので治す
     orig.textContent('本体');
     header.appendChild(orig);
     const diffs = document.createElement('td');
     diffs.setAttribute('align', 'center');
+    diffs.setAttribute('width', '10%') // TODO レガシーなので治す
     diffs.textContent('差分');
     header.appendChild(diffs);
     const comment = document.createElement('td');
     comment.setAttribute('align', 'center');
+    comment.setAttribute('width', '15%') // TODO レガシーなので治す
     comment.textContent('コメント');
     header.appendChild(comment);
     table_elem.appendChild(header);
@@ -76,12 +81,10 @@ const makeBMSTable = (info, mark) => {
         line.setAttribute('class', status_class)
         // レベル表記
         const level = document.createElement('td');
-        level.setAttribute('width', '5%') // TODO レガシーなので治す
         level.textContent = mark + current.level;
         line.appendChild(level);
         // タイトル
         const title = document.createElement('td');
-        title.setAttribute('width', '20%') // TODO レガシーなので治す
         const ir_elem = document.createElement('a');
         ir_elem.textContent = current.title;
         ir_elem.setAttribute('href',`http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=${current.md5}`);
@@ -90,7 +93,6 @@ const makeBMSTable = (info, mark) => {
         line.appendChild(title);
         // 本体情報
         const orig_url = document.createElement('td');
-        orig_url.setAttribute('width', '20%') // TODO レガシーなので治す
         if (current.url) {
             const orig_link = document.createElement('a');
             orig_link.setAttribute('href', current.url);
@@ -100,7 +102,6 @@ const makeBMSTable = (info, mark) => {
         line.appendChild(orig_url);
         // 差分
         const diff_url = document.createElement('td');
-        diff_url.setAttribute('width', '10%') // TODO レガシーなので治す
         if(current.url_diff != null) {
             const download_url = current.url_diff.replace(/^(_*)?/, ''); // アンスコ対応
             const name         = current.name_diff ? current.name_diff : current.url_diff;
@@ -115,7 +116,6 @@ const makeBMSTable = (info, mark) => {
         line.appendChild(diff_url);
         // コメント
         const comment = document.createElement('td');
-        comment.setAttribute('width', '15%') // TODO レガシーなので治す
         comment.textContent = current.comment ? current.comment : '';
         line.appendChild(comment);
 
