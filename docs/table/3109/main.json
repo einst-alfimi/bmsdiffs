@@ -51,7 +51,8 @@
     "title": "Beatrice [MANIAC]",
     "md5": "64f67cb5e24408f00f85e06c25117a32",
     "level": "8",
-    "url_diff": "_br_maniac.bme"
+    "url_diff": "_br_maniac.bme",
+    "comment": "★10"
   },
   {
     "title": "パッパララッパー[MANIAC]",
@@ -75,7 +76,8 @@
     "title": "Shiratsuyu [鹿]",
     "md5": "8879cf9a0a9655b7114d13cec6481a3f",
     "level": "12",
-    "url_diff": "Shiratsuyu_7shika.bme"
+    "url_diff": "Shiratsuyu_7shika.bme",
+    "comment": "up0351.zip"
   },
   {
     "title": "Summerland [7key Maniac]",
@@ -87,13 +89,15 @@
     "title": "The Gorilla [MANIAC]",
     "md5": "320d055639a908309e0b911ad9a6c979",
     "level": "13",
-    "url_diff": "gorilla(M).bme"
+    "url_diff": "gorilla(M).bme",
+    "comment": "汎用 up1861"
   },
   {
     "title": "KYOTO-HOT [ANOTHER]",
     "md5": "5c6f58d789af8f699dfbd94cb3d95713",
     "level": "14",
-    "url_diff": "__hot.bme"
+    "url_diff": "__hot.bme",
+    "comment": "多分入手困難"
   },
   {
     "title": "Here we go！(TM edit) [^p^]",
@@ -105,7 +109,8 @@
     "title": "スクラッチマニア！このゆびとまれ！",
     "md5": "f0e849a7d2266bd4d6cd6246f764835d",
     "level": "15",
-    "url_diff": "scratchmania_sr3.bme"
+    "url_diff": "scratchmania_sr3.bme",
+    "comment": "汎用 up1687"
   },
   {
     "title": "Disaster -Maniac-",
@@ -135,7 +140,8 @@
     "title": "OSARA magic!! [BLACK ANOTHER]",
     "md5": "33c21d04ac761cc4b73d5989d0877116",
     "level": "18",
-    "url_diff": "04_osara_d.bme"
+    "url_diff": "04_osara_d.bme",
+    "comment": "同梱譜面"
   },
   {
     "title": "Merrick",
@@ -147,7 +153,8 @@
     "title": "Only Diversity [MANIAC]",
     "md5": "fa14380ea45e644b5b7a67f73bf38720",
     "level": "19",
-    "url_diff": "_7mani.bme"
+    "url_diff": "_7mani.bme",
+    "comment": "汎用 up1635"
   },
   {
     "title": "PEACE BREAKER [Dystopia]",
@@ -177,7 +184,8 @@
     "title": "ON THE DiSH -enoshima style- [BLACK ANOTHER]",
     "md5": "e0265c49f6218c6196197131d2b4cecf",
     "level": "20",
-    "url_diff": "dish_4x.bme"
+    "url_diff": "dish_4x.bme",
+    "comment": "同梱"
   },
   {
     "title": "空跳ぶ少女 [EXTREME7]",
@@ -201,7 +209,8 @@
     "title": "絶対的共依存-Codependence-",
     "md5": "3cc376adecd0e196a34a12eb39311146",
     "level": "21",
-    "url_diff": "00_hope_codependence_sr3.bme"
+    "url_diff": "00_hope_codependence_sr3.bme",
+    "comment": "★21 "
   },
   {
     "title": "恋愛には奥手だが、そのぶん耳の穴を広げてしまう耳穴系男子 [BEGINNER]",
@@ -255,7 +264,8 @@
     "title": "サンバランド -LAST BOSS-",
     "md5": "093a8d66b89944db9e42aa2321b4f637",
     "level": "23",
-    "url_diff": "_sambaland_lastboss.bme"
+    "url_diff": "_sambaland_lastboss.bme",
+    "comment": "★23, ★★3"
   },
   {
     "title": "Backside of the world [Maniac]",
@@ -267,13 +277,15 @@
     "title": "Shiratsuyu [ハシュ]",
     "md5": "5b411cd3fc7481bad67d452137c6c259",
     "level": "24",
-    "url_diff": "Shiratsuyu_7hashu.bme"
+    "url_diff": "Shiratsuyu_7hashu.bme",
+    "comment": "同梱"
   },
   {
     "title": "ダークサンバランド -LAST BOSS-",
     "md5": "ebc5946c3de24a01048d1c90cbd5c9d6",
     "level": "24",
-    "url_diff": "_dark_sambaland_7lastboss.bme"
+    "url_diff": "_dark_sambaland_7lastboss.bme",
+    "comment": "★24, 同梱譜面"
   },
   {
     "title": "cold planet (LN Maniac)",
