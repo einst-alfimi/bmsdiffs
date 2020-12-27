@@ -32,10 +32,9 @@ window.addEventListener('load', (event) => {
 
 // 表生成処理
 const makeBMSTable = (info, mark) => {
-    var x = "";
-    var ev = "";
-    var count = 0;
-    var obj = $("#table_int");
+    let x = "";
+    let count = 0;
+    let obj = $("#table_int");
     // 表のクリア
     obj.html("");
     // テーブルヘッダ
@@ -54,13 +53,10 @@ const makeBMSTable = (info, mark) => {
             x = current.level; // クソ実装すぎ
         }
         // 本文
-        var str = $("<tr class='tr_normal'></tr>");
-        if(current.state == 1) {
-        str = $("<tr class='tr_new'></tr>");
-        }
-        if(current.state == 2) {        
-        str = $("<tr class='tr_update'></tr>");
-        }
+        const status_class = current.state == 1 ? 'tr_new'
+                           : current.state == 2 ? 'tr_update'
+                           : 'tr_normal';
+        const str = $(`<tr class='${status_class}'></tr>`);
         // レベル表記
         const level = mark + x;
         $(`<td width='5%'>${level}</td>`).appendTo(str);
