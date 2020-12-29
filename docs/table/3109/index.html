@@ -6,6 +6,7 @@
 <meta name="bmstable" content="./head.json" />
 <link href="./style.css" rel="stylesheet" type="text/css" media="screen,print" />
 <script language="javascript" type="text/javascript">
+let table_elem;
 // 取得処理
 const getJson = (url, fn) => {
     let xhr = new XMLHttpRequest();
@@ -23,11 +24,13 @@ const getTableData = (res) => {
 }
 
 window.addEventListener('load', (event) => {
+    table_elem = document.getElementById("table_int");
+
     const description_url = document.getElementsByName('bmstable')[0].content;
     getJson(description_url, getTableData);
 });
 
-const makeTableHeader = (table_elem) => {
+const makeTableHeader = () => {
     const header = document.createElement('tr');
     header.setAttribute('height', '20');
     header.setAttribute('style', 'color:white;background-color:#666666')
@@ -62,7 +65,6 @@ const makeTableHeader = (table_elem) => {
 // 表生成処理
 const makeBMSTable = (info, mark) => {
     let x = "";
-    const table_elem = document.getElementById("table_int");
     table_elem.innerHTML = ''; // 表のクリア
     // テーブルヘッダ
     makeTableHeader(table_elem);
