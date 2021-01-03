@@ -40,7 +40,7 @@ const makeTableHeader = () => {
     level.textContent = 'LV';
     header.appendChild(level);
     const title = document.createElement('td');
-    title.setAttribute('align', 'left');
+    title.setAttribute('align', 'center');
     title.setAttribute('width', '20%') // TODO レガシーなので治す
     title.textContent = 'タイトル';
     header.appendChild(title);
@@ -55,7 +55,7 @@ const makeTableHeader = () => {
     diffs.textContent = '差分';
     header.appendChild(diffs);
     const comment = document.createElement('td');
-    comment.setAttribute('align', 'left');
+    comment.setAttribute('align', 'center');
     comment.textContent = 'コメント';
     header.appendChild(comment);
     table_elem.appendChild(header);
