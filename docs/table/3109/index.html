@@ -82,6 +82,7 @@ const makeBMSTable = (info, mark) => {
         line.appendChild(level);
         // タイトル
         const title = document.createElement('td');
+        title.setAttribute('class', 'title') // TODO
         const title_div = document.createElement('div');
         const title_span = document.createElement('span');
         const ir_elem = document.createElement('a');
