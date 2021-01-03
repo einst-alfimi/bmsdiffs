@@ -36,7 +36,7 @@ const makeTableHeader = () => {
     header.setAttribute('style', 'color:white;background-color:#666666')
     const level = document.createElement('td');
     level.setAttribute('align', 'center');
-    level.setAttribute('width', '5%') // TODO レガシーなので治す
+    level.setAttribute('width', '30px') // TODO レガシーなので治す
     level.textContent = 'LV';
     header.appendChild(level);
     const title = document.createElement('td');
@@ -51,12 +51,11 @@ const makeTableHeader = () => {
     header.appendChild(orig);
     const diffs = document.createElement('td');
     diffs.setAttribute('align', 'center');
-    diffs.setAttribute('width', '10%') // TODO レガシーなので治す
+    diffs.setAttribute('width', '128px') // TODO レガシーなので治す
     diffs.textContent = '差分';
     header.appendChild(diffs);
     const comment = document.createElement('td');
     comment.setAttribute('align', 'center');
-    comment.setAttribute('width', '15%') // TODO レガシーなので治す
     comment.textContent = 'コメント';
     header.appendChild(comment);
     table_elem.appendChild(header);
@@ -102,11 +101,12 @@ const makeBMSTable = (info, mark) => {
         // 差分
         const diff_url = document.createElement('td');
         if(current.url_diff) {
-            const download_url = current.url_diff.replace(/^(_*)?/, ''); // アンスコ対応
-            const name         = current.name_diff ? current.name_diff : current.url_diff;
+            // ファイル名独自対応
+            const download_url = current.file_name ? './bms/' + current.file_name.replace(/^(_*)?/, '') : current.url_diff; // アンスコ対応
+            // const name         = current.name_diff ? current.name_diff : current.file_name; //使っとらん
             const diff_link    = document.createElement('a');
-            diff_link.setAttribute('href', `./bms/${download_url}`);
-            diff_link.setAttribute('download', `${current.url_diff}`);
+            diff_link.setAttribute('href', `${download_url}`);
+            diff_link.setAttribute('download', `${current.file_name}`);
             diff_link.textContent = '差分ダウンロード';
             diff_url.appendChild(diff_link);
         } else {
