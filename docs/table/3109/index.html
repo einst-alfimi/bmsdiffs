@@ -33,25 +33,25 @@ window.addEventListener('load', (event) => {
 const makeTableHeader = () => {
     const header = document.createElement('tr');
     header.setAttribute('height', '20');
-    header.setAttribute('style', 'color:white;background-color:#666666')
+    header.setAttribute('style', 'color:white;background-color:#666666');
     const level = document.createElement('td');
     level.setAttribute('align', 'center');
-    level.setAttribute('width', '30px') // TODO レガシーなので治す
+    level.setAttribute('width', '30px'); // TODO レガシーなので治す
     level.textContent = 'LV';
     header.appendChild(level);
     const title = document.createElement('td');
     title.setAttribute('align', 'center');
-    title.setAttribute('width', '20%') // TODO レガシーなので治す
+    // title.setAttribute('width', '20%'); 
     title.textContent = 'タイトル';
     header.appendChild(title);
     const orig = document.createElement('td');
     orig.setAttribute('align', 'center');
-    orig.setAttribute('width', '20%') // TODO レガシーなので治す
+    orig.setAttribute('width', '20%'); // TODO レガシーなので治す
     orig.textContent = '本体';
     header.appendChild(orig);
     const diffs = document.createElement('td');
     diffs.setAttribute('align', 'center');
-    diffs.setAttribute('width', '128px') // TODO レガシーなので治す
+    diffs.setAttribute('width', '128px'); // TODO レガシーなので治す
     diffs.textContent = '差分';
     header.appendChild(diffs);
     const comment = document.createElement('td');
