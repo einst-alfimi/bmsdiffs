@@ -32,7 +32,7 @@ window.addEventListener('load', (event) => {
 
 const makeTableHeader = () => {
     const header = document.createElement('tr');
-    header.setAttribute('height', '20');
+    header.setAttribute('height', '20px');
     header.setAttribute('style', 'color:white;background-color:#666666');
     const level = document.createElement('td');
     level.setAttribute('align', 'center');
@@ -41,12 +41,12 @@ const makeTableHeader = () => {
     header.appendChild(level);
     const title = document.createElement('td');
     title.setAttribute('align', 'center');
-    // title.setAttribute('width', '20%'); 
+    title.setAttribute('width', '500px'); 
     title.textContent = 'タイトル';
     header.appendChild(title);
     const orig = document.createElement('td');
     orig.setAttribute('align', 'center');
-    orig.setAttribute('width', '20%'); // TODO レガシーなので治す
+    orig.setAttribute('width', '128px'); // TODO レガシーなので治す
     orig.textContent = '本体';
     header.appendChild(orig);
     const diffs = document.createElement('td');
