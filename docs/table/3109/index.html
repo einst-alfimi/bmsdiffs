@@ -106,7 +106,8 @@ const makeBMSTable = (info, mark) => {
             // const name         = current.name_diff ? current.name_diff : current.file_name; //使っとらん
             const diff_link    = document.createElement('a');
             diff_link.setAttribute('href', `${download_url}`);
-            diff_link.setAttribute('download', `${current.file_name}`);
+            // 直リンクの場合のみdownload属性付与
+            current.file_name ? diff_link.setAttribute('download', `${current.file_name}`) : null;
             diff_link.textContent = '差分ダウンロード';
             diff_url.appendChild(diff_link);
         } else {
