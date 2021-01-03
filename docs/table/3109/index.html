@@ -40,7 +40,7 @@ const makeTableHeader = () => {
     level.textContent = 'LV';
     header.appendChild(level);
     const title = document.createElement('td');
-    title.setAttribute('align', 'center');
+    title.setAttribute('align', 'left');
     title.setAttribute('width', '20%') // TODO レガシーなので治す
     title.textContent = 'タイトル';
     header.appendChild(title);
@@ -55,7 +55,7 @@ const makeTableHeader = () => {
     diffs.textContent = '差分';
     header.appendChild(diffs);
     const comment = document.createElement('td');
-    comment.setAttribute('align', 'center');
+    comment.setAttribute('align', 'left');
     comment.textContent = 'コメント';
     header.appendChild(comment);
     table_elem.appendChild(header);
@@ -82,11 +82,15 @@ const makeBMSTable = (info, mark) => {
         line.appendChild(level);
         // タイトル
         const title = document.createElement('td');
+        const title_div = document.createElement('div');
+        const title_span = document.createElement('span');
         const ir_elem = document.createElement('a');
         ir_elem.textContent = current.title;
         ir_elem.setAttribute('href',`http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=${current.md5}`);
         ir_elem.setAttribute('target','_blank');
-        title.appendChild(ir_elem);
+        title_span.appendChild(ir_elem);
+        title_div.appendChild(title_span);
+        title.appendChild(title_div);
         line.appendChild(title);
         // 本体情報
         const orig_url = document.createElement('td');
@@ -155,7 +159,7 @@ const makeBMSTable = (info, mark) => {
 <p style="color:#ffffee">表の見た目が変わる場合がございます。</p>
 
 <div class="tableflame">
-<table align="center" cellspacing="1" cellpadding="2" border="0" bgcolor="#000000" id="table_int">
+<table align="center" cellspacing="1" cellpadding="2" border="0" bgcolor="#000000" class="table_main" id="table_int">
 </table>
 </div>
 
