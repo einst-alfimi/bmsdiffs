@@ -88,7 +88,8 @@ background-color:#70f0f0;
 	display: flex;
 }
 .table_main td div span{
-	margin: auto;
+    margin-left: 10px;
+	margin-right: 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
