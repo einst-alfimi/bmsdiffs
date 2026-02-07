@@ -81,7 +81,7 @@
       for (const card of sortedCards) {
         const set = getSetForCardName(card.name, cardSetLookup);
         const li = document.createElement('li');
-        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-set">${escapeHtml(set)}</span>`;
+        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-set">${escapeHtml(card.type)}</span><span class="card-set">${escapeHtml(set)}</span>`;
         listEl.appendChild(li);
       }
     }
