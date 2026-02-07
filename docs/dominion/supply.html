@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>サプライ選択 — 各カードの拡張</title>
+  <title>推奨サプライ選択ツール</title>
   <style>
     body { font-family: sans-serif; max-width: 640px; margin: 1rem auto; padding: 0 1rem; }
     select { width: 100%; padding: 0.5rem; font-size: 1rem; }
@@ -17,9 +17,9 @@
   </style>
 </head>
 <body>
-  <h1>サプライ選択 — 各カードの拡張</h1>
+  <h1>推奨サプライ一覧</h1>
   <p>
-    <label for="supply-select">supply_list から選択:</label><br>
+    <label for="supply-select">サプライ選択:</label><br>
     <select id="supply-select" size="1"></select>
   </p>
   <div id="cards-result" class="result">
@@ -72,7 +72,13 @@
         listEl.appendChild(li);
         return;
       }
-      for (const card of cards) {
+      const sortedCards = [...cards].sort((a, b) => {
+        const setA = getSetForCardName(a.name, cardSetLookup);
+        const setB = getSetForCardName(b.name, cardSetLookup);
+        return setA.localeCompare(setB, 'ja');
+      });
+
+      for (const card of sortedCards) {
         const set = getSetForCardName(card.name, cardSetLookup);
         const li = document.createElement('li');
         li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-set">${escapeHtml(set)}</span>`;
@@ -84,8 +90,8 @@
       const colony = item.colony === true;
       const shelter = item.shelter === true;
       colonyShelterEl.innerHTML = `
-        <div><span>植民地 (colony):</span> ${colony ? '使用' : '不使用'}</div>
-        <div><span>避難所 (shelter):</span> ${shelter ? '使用' : '不使用'}</div>
+        <div><span>植民地/プラチナ:</span> ${colony ? '使用' : '不使用'}</div>
+        <div><span>避難所:</span> ${shelter ? '使用' : '不使用'}</div>
       `;
     }
 
