@@ -62,8 +62,7 @@
     function getTypeForCardName(cardName, cardDataLookup) {
       if (!cardName || !cardDataLookup) return '';
       const card = cardDataLookup.get(normalizeName(cardName));
-      const t = card?.types_ja ?? card?.types ?? '';
-      return Array.isArray(t) ? t.join(' - ') : t;
+      return card?.type ?? '';
     }
 
     function escapeHtml(s) {
