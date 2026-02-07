@@ -12,6 +12,7 @@
     .card-list li { padding: 0.25rem 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; gap: 1rem; }
     .card-list li:last-child { border-bottom: none; }
     .card-set { color: #666; font-size: 0.9em; }
+    .card-types { font-size: 0.85em; color: #555; margin-right: auto; }
     .colony-shelter { margin-top: 1rem; display: flex; gap: 2rem; }
     .colony-shelter span { font-weight: bold; }
   </style>
@@ -41,20 +42,28 @@
       return s.trim();
     }
 
-    /** dominion_cards.json から カード名(日本語) -> 拡張名 の Map を構築 */
-    function buildCardSetLookup(dominionCardsData) {
+    /** dominion_cards.json から カード名(日本語) -> カードデータ の Map を構築 */
+    function buildCardDataLookup(dominionCardsData) {
       const map = new Map();
       if (!dominionCardsData?.cards) return map;
       for (const c of dominionCardsData.cards) {
         const nameJa = normalizeName(c.name_ja ?? '');
-        if (nameJa && !map.has(nameJa)) map.set(nameJa, c.set ?? '—');
+        if (nameJa && !map.has(nameJa)) map.set(nameJa, c);
       }
       return map;
     }
 
-    function getSetForCardName(cardName, cardSetLookup) {
-      if (!cardName || !cardSetLookup) return '—';
-      return cardSetLookup.get(normalizeName(cardName)) ?? '—';
+    function getSetForCardName(cardName, cardDataLookup) {
+      if (!cardName || !cardDataLookup) return '—';
+      const card = cardDataLookup.get(normalizeName(cardName));
+      return card?.set ?? '—';
+    }
+
+    function getTypeForCardName(cardName, cardDataLookup) {
+      if (!cardName || !cardDataLookup) return '';
+      const card = cardDataLookup.get(normalizeName(cardName));
+      const t = card?.types_ja ?? card?.types ?? '';
+      return Array.isArray(t) ? t.join(' - ') : t;
     }
 
     function escapeHtml(s) {
@@ -64,7 +73,7 @@
       return div.innerHTML;
     }
 
-    function renderCardList(listEl, cards, cardSetLookup) {
+    function renderCardList(listEl, cards, cardDataLookup) {
       listEl.innerHTML = '';
       if (!cards?.length) {
         const li = document.createElement('li');
@@ -73,15 +82,16 @@
         return;
       }
       const sortedCards = [...cards].sort((a, b) => {
-        const setA = getSetForCardName(a.name, cardSetLookup);
-        const setB = getSetForCardName(b.name, cardSetLookup);
+        const setA = getSetForCardName(a.name, cardDataLookup);
+        const setB = getSetForCardName(b.name, cardDataLookup);
         return setA.localeCompare(setB, 'ja');
       });
 
       for (const card of sortedCards) {
-        const set = getSetForCardName(card.name, cardSetLookup);
+        const set = getSetForCardName(card.name, cardDataLookup);
+        const type = getTypeForCardName(card.name, cardDataLookup);
         const li = document.createElement('li');
-        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-set">${escapeHtml(card.type)}</span><span class="card-set">${escapeHtml(set)}</span>`;
+        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-types">${escapeHtml(type)}</span><span class="card-set">${escapeHtml(set)}</span>`;
         listEl.appendChild(li);
       }
     }
@@ -106,7 +116,7 @@
       }
       const supplyListData = await listRes.json();
       const dominionCardsData = await cardsRes.json();
-      const cardSetLookup = buildCardSetLookup(dominionCardsData);
+      const cardDataLookup = buildCardDataLookup(dominionCardsData);
       const supplyList = supplyListData.supplies ?? [];
 
       supplyList.forEach((item, i) => {
@@ -120,8 +130,8 @@
         const index = parseInt(selectEl.value, 10);
         const item = supplyList[index];
         if (!item) return;
-        renderCardList(kingdomListEl, item.kingdom_cards ?? [], cardSetLookup);
-        renderCardList(extraListEl, item.extra_cards ?? [], cardSetLookup);
+        renderCardList(kingdomListEl, item.kingdom_cards ?? [], cardDataLookup);
+        renderCardList(extraListEl, item.extra_cards ?? [], cardDataLookup);
         renderColonyShelter(item);
       }
 
