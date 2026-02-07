@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>サプライ選択 — 各カードの拡張</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 1rem auto; padding: 0 1rem; }
+    select { width: 100%; padding: 0.5rem; font-size: 1rem; }
+    .result { margin-top: 1rem; padding: 1rem; background: #f0f0f0; border-radius: 8px; }
+    .result h2 { margin-top: 0; }
+    .card-list { list-style: none; padding-left: 0; }
+    .card-list li { padding: 0.25rem 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; gap: 1rem; }
+    .card-list li:last-child { border-bottom: none; }
+    .card-set { color: #666; font-size: 0.9em; }
+    .colony-shelter { margin-top: 1rem; display: flex; gap: 2rem; }
+    .colony-shelter span { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>サプライ選択 — 各カードの拡張</h1>
+  <p>
+    <label for="supply-select">supply_list から選択:</label><br>
+    <select id="supply-select" size="1"></select>
+  </p>
+  <div id="cards-result" class="result">
+    <h2>王国カード</h2>
+    <ul id="kingdom-list" class="card-list"></ul>
+    <h2>追加カード</h2>
+    <ul id="extra-list" class="card-list"></ul>
+    <div id="colony-shelter" class="colony-shelter"></div>
+  </div>
+
+  <script type="module">
+    const selectEl = document.getElementById('supply-select');
+    const kingdomListEl = document.getElementById('kingdom-list');
+    const extraListEl = document.getElementById('extra-list');
+    const colonyShelterEl = document.getElementById('colony-shelter');
+
+    function normalizeName(s) {
+      if (!s || typeof s !== 'string') return '';
+      return s.trim();
+    }
+
+    /** dominion_cards.json から カード名(日本語) -> 拡張名 の Map を構築 */
+    function buildCardSetLookup(dominionCardsData) {
+      const map = new Map();
+      if (!dominionCardsData?.cards) return map;
+      for (const c of dominionCardsData.cards) {
+        const nameJa = normalizeName(c.name_ja ?? '');
+        if (nameJa && !map.has(nameJa)) map.set(nameJa, c.set ?? '—');
+      }
+      return map;
+    }
+
+    function getSetForCardName(cardName, cardSetLookup) {
+      if (!cardName || !cardSetLookup) return '—';
+      return cardSetLookup.get(normalizeName(cardName)) ?? '—';
+    }
+
+    function escapeHtml(s) {
+      if (s == null) return '';
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function renderCardList(listEl, cards, cardSetLookup) {
+      listEl.innerHTML = '';
+      if (!cards?.length) {
+        const li = document.createElement('li');
+        li.textContent = '（なし）';
+        listEl.appendChild(li);
+        return;
+      }
+      for (const card of cards) {
+        const set = getSetForCardName(card.name, cardSetLookup);
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-set">${escapeHtml(set)}</span>`;
+        listEl.appendChild(li);
+      }
+    }
+
+    function renderColonyShelter(item) {
+      const colony = item.colony === true;
+      const shelter = item.shelter === true;
+      colonyShelterEl.innerHTML = `
+        <div><span>植民地 (colony):</span> ${colony ? '使用' : '不使用'}</div>
+        <div><span>避難所 (shelter):</span> ${shelter ? '使用' : '不使用'}</div>
+      `;
+    }
+
+    async function init() {
+      const [listRes, cardsRes] = await Promise.all([
+        fetch('supply_list.json'),
+        fetch('dominion_cards.json'),
+      ]);
+      if (!listRes.ok || !cardsRes.ok) {
+        selectEl.innerHTML = '<option>JSON の読み込みに失敗しました（ローカルで開く場合はサーバーが必要です）</option>';
+        return;
+      }
+      const supplyListData = await listRes.json();
+      const dominionCardsData = await cardsRes.json();
+      const cardSetLookup = buildCardSetLookup(dominionCardsData);
+      const supplyList = supplyListData.supplies ?? [];
+
+      supplyList.forEach((item, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${item.expansion} — ${item.name}`;
+        selectEl.appendChild(opt);
+      });
+
+      function update() {
+        const index = parseInt(selectEl.value, 10);
+        const item = supplyList[index];
+        if (!item) return;
+        renderCardList(kingdomListEl, item.kingdom_cards ?? [], cardSetLookup);
+        renderCardList(extraListEl, item.extra_cards ?? [], cardSetLookup);
+        renderColonyShelter(item);
+      }
+
+      selectEl.addEventListener('change', update);
+      update();
+    }
+
+    init();
+  </script>
+</body>
+</html>
