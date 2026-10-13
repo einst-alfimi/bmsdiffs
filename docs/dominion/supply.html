@@ -2,428 +2,230 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>推奨サプライ選択ツール — ドミニオン</title>
+  <title>推奨サプライ選択ツール</title>
   <style>
-    :root {
-      --primary-color: #2b5c8f;
-      --primary-hover: #1f4369;
-      --accent-color: #d97706;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --border-color: #e2e8f0;
-      --text-color: #1e293b;
-      --text-muted: #64748b;
-      --tag-bg: #e0e7ff;
-      --tag-color: #3730a3;
-    }
-
-    * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem 3rem;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.5;
+      font-family: sans-serif;
+      max-width: 640px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+      color: #333;
     }
-
     h1 {
-      font-size: 1.6rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: var(--primary-color);
-      text-align: center;
-    }
-    .subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    /* アコーディオン */
-    details.panel {
-      padding: 0;
-    }
-    details.panel summary {
-      padding: 0.9rem 1.25rem;
-      cursor: pointer;
-      font-weight: bold;
-      user-select: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      list-style: none;
-    }
-    details.panel summary::-webkit-details-marker { display: none; }
-    details.panel summary::after {
-      content: '▼';
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    details[open].panel summary::after {
-      transform: rotate(180deg);
-    }
-    .panel-content {
-      padding: 0 1.25rem 1.25rem;
-      border-top: 1px solid var(--border-color);
-    }
-
-    /* 拡張セット選択グリッド */
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 0.75rem 0 1rem;
-    }
-    .btn-sm {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.8rem;
-      border: 1px solid var(--border-color);
-      background: #f1f5f9;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--text-color);
-      transition: background 0.15s;
-    }
-    .btn-sm:hover { background: #e2e8f0; }
-
-    .exp-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-      gap: 0.5rem;
-      font-size: 0.85rem;
-    }
-    .exp-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.4rem;
-      border-radius: 4px;
-    }
-    .exp-item:hover { background: #f8fafc; }
-    .exp-item label {
-      cursor: pointer;
-      user-select: none;
-      flex: 1;
-    }
-
-    /* コントローラー & ランダムボタン */
-    .random-section {
-      text-align: center;
-      margin: 1.25rem 0;
-    }
-    .btn-random {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      width: 100%;
-      padding: 0.85rem 1.5rem;
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px -1px rgba(37,99,235,0.3);
-      transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
-    }
-    .btn-random:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1e40af);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 10px -1px rgba(37,99,235,0.4);
-    }
-    .btn-random:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 4px -1px rgba(37,99,235,0.3);
-    }
-    .btn-random:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .select-group {
-      margin-top: 1rem;
-    }
-    .select-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.35rem;
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-    .filter-toggle {
-      font-size: 0.8rem;
-      font-weight: normal;
-      color: var(--text-muted);
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
     }
     select {
       width: 100%;
-      padding: 0.65rem 0.75rem;
-      font-size: 0.95rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background-color: #fff;
-      color: var(--text-color);
-      outline: none;
-      transition: border-color 0.2s;
+      padding: 0.5rem;
+      font-size: 1rem;
     }
-    select:focus {
-      border-color: var(--primary-color);
+    button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
-    /* 結果表示エリア */
-    .result {
-      margin-top: 1.25rem;
-      padding: 1.25rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: opacity 0.2s ease;
-    }
-    .result.animating {
-      opacity: 0.4;
-    }
-    .supply-title-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding-bottom: 0.75rem;
+    /* 操作エリア */
+    .controls {
       margin-bottom: 1rem;
-      border-bottom: 2px solid var(--border-color);
     }
-    .supply-name {
-      font-size: 1.35rem;
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn-random {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
       font-weight: bold;
-      color: var(--primary-color);
-      margin: 0;
     }
-    .supply-expansion {
+    .status-text {
       font-size: 0.85rem;
-      background: var(--tag-bg);
-      color: var(--tag-color);
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      font-weight: 500;
+      color: #666;
     }
 
-    .result h2 {
-      font-size: 1.05rem;
-      margin: 1.25rem 0 0.5rem;
-      padding-bottom: 0.25rem;
-      border-bottom: 1px solid var(--border-color);
-      color: #334155;
+    /* 所持拡張・除外アコーディオン */
+    details {
+      margin-bottom: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fafafa;
+    }
+    details summary {
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    .details-content {
+      padding: 0.5rem 0.75rem;
+      border-top: 1px solid #ddd;
+      background: #fff;
+    }
+    .btn-group {
+      margin-bottom: 0.5rem;
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .exp-item label {
+      cursor: pointer;
+      margin-left: 0.25rem;
+    }
+
+    .excluded-list {
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+    }
+    .excluded-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid #eee;
     }
-    .result h2 .count {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: normal;
+    .excluded-item label {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-left: 0.25rem;
+    }
+    .excluded-item .exp-label {
+      color: #888;
+      font-size: 0.8em;
     }
 
+    /* 結果表示 */
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f0f0f0;
+      border-radius: 8px;
+    }
+    .result h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    .supply-header {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .supply-header h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.3rem;
+    }
+    .supply-header .expansion-name {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .section-title {
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem;
+      color: #444;
+    }
     .card-list {
       list-style: none;
       padding-left: 0;
       margin: 0;
     }
     .card-list li {
-      padding: 0.45rem 0.25rem;
-      border-bottom: 1px solid #f1f5f9;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid #ddd;
       display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.95rem;
+      justify-content: space-between;
+      gap: 1rem;
     }
     .card-list li:last-child {
       border-bottom: none;
     }
-    .card-list li.empty-item {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .card-main {
-      font-weight: 600;
-      color: #0f172a;
-      flex: 1 1 200px;
-    }
-    .card-cost {
-      font-weight: normal;
-      color: #b45309;
+    .card-set {
+      color: #666;
       font-size: 0.9em;
-      margin-left: 0.25rem;
+      white-space: nowrap;
     }
     .card-types {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      flex: 1 1 140px;
-      text-align: left;
+      font-size: 0.85em;
+      color: #555;
+      margin-right: auto;
     }
-    .card-set {
-      color: #475569;
-      font-size: 0.8rem;
-      background: #f1f5f9;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      white-space: nowrap;
-      text-align: right;
-    }
-    .card-note {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-left: 0.25rem;
-      font-weight: normal;
-    }
-
     .colony-shelter {
-      margin-top: 1.25rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid var(--border-color);
+      margin-top: 1rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #ddd;
       display: flex;
       gap: 2rem;
       font-size: 0.9rem;
     }
     .colony-shelter span {
       font-weight: bold;
-      color: #334155;
-    }
-    .badge-yes {
-      color: #15803d;
-      font-weight: bold;
-    }
-    .badge-no {
-      color: var(--text-muted);
-    }
-
-    /* サプライ除外リスト */
-    .excluded-supplies-container {
-      max-height: 250px;
-      overflow-y: auto;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      background: #fff;
-    }
-    .supply-check-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.25rem 0.4rem;
-      font-size: 0.85rem;
-      border-bottom: 1px solid #f8fafc;
-    }
-    .supply-check-item:hover { background: #f8fafc; }
-    .supply-check-item label {
-      cursor: pointer;
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-    }
-    .supply-check-item .supp-exp {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-    }
-
-    .badge-count {
-      display: inline-block;
-      background: var(--tag-bg);
-      color: var(--tag-color);
-      padding: 0.15rem 0.5rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: normal;
     }
   </style>
 </head>
 <body>
-  <h1>推奨サプライ選択ツール</h1>
-  <div class="subtitle">公式推奨サプライ 468種類に対応</div>
+  <h1>推奨サプライ一覧</h1>
 
-  <!-- 所持拡張選択パネル -->
-  <details id="expansion-panel" class="panel">
-    <summary>
-      <span>📦 所持している拡張セットの選択</span>
-      <span id="owned-count-badge" class="badge-count">読み込み中...</span>
-    </summary>
-    <div class="panel-content">
-      <div class="button-row">
-        <button id="btn-select-all-exp" class="btn-sm" type="button">すべて選択</button>
-        <button id="btn-deselect-all-exp" class="btn-sm" type="button">すべて解除</button>
-        <button id="btn-select-v2-exp" class="btn-sm" type="button">第二版＋全拡張を選択</button>
+  <div class="controls">
+    <!-- 所持拡張の選択 -->
+    <details id="expansion-panel">
+      <summary>所持拡張の選択 (<span id="owned-count-badge">...</span>)</summary>
+      <div class="details-content">
+        <div class="btn-group">
+          <button id="btn-select-all-exp" type="button">すべて選択</button>
+          <button id="btn-deselect-all-exp" type="button">すべて解除</button>
+          <button id="btn-select-v2-exp" type="button">第二版＋拡張</button>
+        </div>
+        <div id="expansion-grid" class="exp-grid"></div>
       </div>
-      <div id="expansion-grid" class="exp-grid"></div>
-    </div>
-  </details>
+    </details>
 
-  <!-- ランダム選択 & サプライ選択コントローラー -->
-  <div class="panel">
-    <div class="random-section">
-      <button id="btn-random" class="btn-random" type="button">
-        <span>🎲</span>
-        <span id="btn-random-text">ランダムにサプライを決める</span>
-      </button>
-      <div id="playable-status" style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"></div>
+    <!-- ランダムボタン & 絞り込み -->
+    <div class="action-row">
+      <button id="btn-random" class="btn-random" type="button">ランダム選択</button>
+      <label style="font-size: 0.9rem; cursor: pointer;">
+        <input type="checkbox" id="chk-filter-playable" checked>
+        所持サプライのみ表示
+      </label>
+      <span id="playable-status" class="status-text"></span>
     </div>
 
-    <div class="select-group">
-      <div class="select-header">
-        <label for="supply-select">サプライ選択:</label>
-        <label class="filter-toggle">
-          <input type="checkbox" id="chk-filter-playable" checked>
-          <span>所持サプライのみ表示</span>
-        </label>
+    <!-- サプライ選択セレクトボックス -->
+    <p style="margin: 0.5rem 0 0.25rem;">
+      <label for="supply-select">サプライ選択:</label><br>
+      <select id="supply-select" size="1"></select>
+    </p>
+
+    <!-- 個別除外設定 -->
+    <details id="exclude-panel" style="margin-top: 0.5rem;">
+      <summary style="font-size: 0.85rem; color: #666;">サプライの個別除外・確認 (<span id="eligible-supplies-count">0</span>件)</summary>
+      <div class="details-content">
+        <div id="eligible-supplies-list" class="excluded-list"></div>
       </div>
-      <select id="supply-select"></select>
-    </div>
-
-    <!-- 個別除外設定アコーディオン -->
-    <details id="exclude-panel" style="margin-top: 1rem; font-size: 0.85rem;">
-      <summary style="cursor: pointer; color: var(--text-muted); user-select: none;">
-        <span>⚙️ 対象サプライの個別除外・確認 (<span id="eligible-supplies-count">0</span>件)</span>
-      </summary>
-      <div class="excluded-supplies-container" id="eligible-supplies-list"></div>
     </details>
   </div>
 
-  <!-- サプライ結果表示 -->
+  <!-- 結果表示 -->
   <div id="cards-result" class="result">
-    <div class="supply-title-row">
-      <h2 id="current-supply-name" class="supply-name">サプライ名</h2>
-      <span id="current-supply-exp" class="supply-expansion">拡張名</span>
+    <div class="supply-header">
+      <h2 id="current-supply-name">サプライ名</h2>
+      <div id="current-supply-exp" class="expansion-name">拡張名</div>
     </div>
 
-    <h2>王国カード <span class="count" id="kingdom-count"></span></h2>
+    <div class="section-title">王国カード <span id="kingdom-count" style="font-size:0.85em; color:#666;"></span></div>
     <ul id="kingdom-list" class="card-list"></ul>
 
-    <h2>追加カード <span class="count" id="extra-count"></span></h2>
+    <div class="section-title">追加カード <span id="extra-count" style="font-size:0.85em; color:#666;"></span></div>
     <ul id="extra-list" class="card-list"></ul>
 
     <div id="colony-shelter" class="colony-shelter"></div>
@@ -573,7 +375,6 @@
     const STORAGE_KEY_FILTER_ONLY = 'dominion_filter_only_playable_v1';
 
     // DOM要素
-    const expansionPanelEl = document.getElementById('expansion-panel');
     const ownedCountBadgeEl = document.getElementById('owned-count-badge');
     const expansionGridEl = document.getElementById('expansion-grid');
     const btnSelectAllExp = document.getElementById('btn-select-all-exp');
@@ -581,7 +382,6 @@
     const btnSelectV2Exp = document.getElementById('btn-select-v2-exp');
 
     const btnRandomEl = document.getElementById('btn-random');
-    const btnRandomTextEl = document.getElementById('btn-random-text');
     const playableStatusEl = document.getElementById('playable-status');
     const chkFilterPlayableEl = document.getElementById('chk-filter-playable');
     const selectEl = document.getElementById('supply-select');
@@ -589,7 +389,6 @@
     const eligibleSuppliesCountEl = document.getElementById('eligible-supplies-count');
     const eligibleSuppliesListEl = document.getElementById('eligible-supplies-list');
 
-    const resultBoxEl = document.getElementById('cards-result');
     const currentSupplyNameEl = document.getElementById('current-supply-name');
     const currentSupplyExpEl = document.getElementById('current-supply-exp');
     const kingdomListEl = document.getElementById('kingdom-list');
@@ -651,7 +450,7 @@
         const baseName = parts[parts.length - 1];
         if (lookup.has(baseName)) {
           const parent = lookup.get(baseName);
-          return { ...parent, name_ja: name };
+          return Object.assign({}, parent, { name_ja: name });
         }
       }
 
@@ -680,7 +479,7 @@
         };
       });
 
-      // 城（Castles）の特別正規化
+      // 城・騎士の特別正規化
       list = list.map(card => {
         if (card.name === '城') {
           return {
@@ -723,7 +522,6 @@
             note: pair.note,
             isSplit: true
           };
-          // 最初のカード位置を統合カードにし、残りのインデックスのカードをリストから除外
           const removeSet = new Set(matchIndices.slice(1));
           list = list.filter((_, idx) => !removeSet.has(idx));
           list[firstIdx] = mergedCard;
@@ -750,7 +548,6 @@
           const hasV2 = owned.has('base_v2');
           if (!hasV1 && !hasV2) return false;
           if (!hasV1 && hasV2) {
-            // 初版限定カードを含む場合はv1が必要
             if (kingdomCardNames.some(n => V1_ONLY_CARDS['基本'].includes(n))) return false;
           }
         } else if (part === '陰謀(初版)') {
@@ -845,7 +642,6 @@
           const arr = JSON.parse(savedOwned);
           ownedExpansions = new Set(arr);
         } else {
-          // デフォルト: すべて所持
           ownedExpansions = new Set(EXPANSION_DEFS.map(e => e.id));
         }
 
@@ -911,7 +707,7 @@
     function updateOwnedCountBadge() {
       const count = ownedExpansions.size;
       const total = EXPANSION_DEFS.length;
-      ownedCountBadgeEl.textContent = `${count} / ${total} 選択中`;
+      ownedCountBadgeEl.textContent = `${count} / ${total}`;
     }
 
     /** サプライ選択ドロップダウンの更新 */
@@ -937,7 +733,7 @@
       if (itemsToShow.length === 0) {
         const opt = document.createElement('option');
         opt.value = '';
-        opt.textContent = '（該当するサプライがありません。所持拡張を選択してください）';
+        opt.textContent = '（該当するサプライがありません）';
         selectEl.appendChild(opt);
         selectEl.disabled = true;
         btnRandomEl.disabled = true;
@@ -977,18 +773,17 @@
       eligibleSuppliesListEl.innerHTML = '';
 
       if (eligible.length === 0) {
-        eligibleSuppliesListEl.innerHTML = '<div style="color:var(--text-muted); padding:0.5rem;">該当するサプライがありません。</div>';
+        eligibleSuppliesListEl.innerHTML = '<div style="color:#888; padding:0.25rem 0;">該当サプライなし</div>';
         return;
       }
 
       eligible.forEach(item => {
         const row = document.createElement('div');
-        row.className = 'supply-check-item';
+        row.className = 'excluded-item';
 
         const chk = document.createElement('input');
         chk.type = 'checkbox';
         chk.id = `supp-chk-${item.index}`;
-        // チェックが入っている＝有効（除外されていない）
         chk.checked = !excludedSupplyKeys.has(item.key);
 
         chk.addEventListener('change', () => {
@@ -1004,7 +799,7 @@
 
         const lbl = document.createElement('label');
         lbl.htmlFor = `supp-chk-${item.index}`;
-        lbl.innerHTML = `<span>${escapeHtml(item.supply.name)}</span><span class="supp-exp">${escapeHtml(item.supply.expansion)}</span>`;
+        lbl.innerHTML = `<span>${escapeHtml(item.supply.name)}</span><span class="exp-label">${escapeHtml(item.supply.expansion)}</span>`;
 
         row.appendChild(chk);
         row.appendChild(lbl);
@@ -1014,11 +809,7 @@
 
     function updatePlayableStatus() {
       const playable = getPlayableSupplies();
-      const totalEligible = supplyList.filter(s => canPlaySupply(s, ownedExpansions)).length;
-      playableStatusEl.textContent = `🎲 ランダム抽選対象: ${playable.length} 件 （所持可能: ${totalEligible}件 / 全${supplyList.length}件）`;
-      btnRandomTextEl.textContent = playable.length > 0 
-        ? `ランダムにサプライを決める (${playable.length}件から)` 
-        : `所持サプライがありません`;
+      playableStatusEl.textContent = `対象: ${playable.length} 件`;
       btnRandomEl.disabled = playable.length === 0;
     }
 
@@ -1034,13 +825,11 @@
       listEl.innerHTML = '';
       if (!cards || !cards.length) {
         const li = document.createElement('li');
-        li.className = 'empty-item';
         li.textContent = '（なし）';
         listEl.appendChild(li);
         return;
       }
 
-      // セット名順にソート（王国カードの場合）
       const sortedCards = isKingdom
         ? [...cards].sort((a, b) => (a.set || '').localeCompare(b.set || '', 'ja'))
         : [...cards];
@@ -1048,10 +837,9 @@
       for (const card of sortedCards) {
         const li = document.createElement('li');
         const costStr = card.cost ? ` (${escapeHtml(card.cost)})` : '';
-        const noteStr = card.note ? `<span class="card-note" title="${escapeHtml(card.note)}">ℹ️</span>` : '';
 
         li.innerHTML = `
-          <span class="card-main">${escapeHtml(card.name)}${costStr}${noteStr}</span>
+          <span>${escapeHtml(card.name)}${costStr}</span>
           <span class="card-types">${escapeHtml(card.type || '')}</span>
           <span class="card-set">${escapeHtml(card.set || '—')}</span>
         `;
@@ -1066,16 +854,16 @@
       const colony = item.colony === true;
       const shelter = item.shelter === true;
       colonyShelterEl.innerHTML = `
-        <div><span>植民地/プラチナ:</span> <span class="${colony ? 'badge-yes' : 'badge-no'}">${colony ? '使用' : '不使用'}</span></div>
-        <div><span>避難所:</span> <span class="${shelter ? 'badge-yes' : 'badge-no'}">${shelter ? '使用' : '不使用'}</span></div>
+        <div><span>植民地/プラチナ:</span> ${colony ? '使用' : '不使用'}</div>
+        <div><span>避難所:</span> ${shelter ? '使用' : '不使用'}</div>
       `;
     }
 
     function renderEmptySupply() {
       currentSupplyNameEl.textContent = '—';
       currentSupplyExpEl.textContent = '—';
-      kingdomListEl.innerHTML = '<li class="empty-item">サプライが選択されていません</li>';
-      extraListEl.innerHTML = '<li class="empty-item">（なし）</li>';
+      kingdomListEl.innerHTML = '<li>（サプライが選択されていません）</li>';
+      extraListEl.innerHTML = '<li>（なし）</li>';
       kingdomCountEl.textContent = '';
       extraCountEl.textContent = '';
       colonyShelterEl.innerHTML = '';
@@ -1093,7 +881,7 @@
       // 王国カードの正規化（城や分割カードを1行化）
       const normKingdomCards = normalizeKingdomCards(item.kingdom_cards || [], cardDataLookup);
       renderCardList(kingdomListEl, normKingdomCards, true);
-      kingdomCountEl.textContent = `(${normKingdomCards.length}サプライ)`;
+      kingdomCountEl.textContent = `(${normKingdomCards.length})`;
 
       // 追加カードの正規化
       const normExtraCards = (item.extra_cards || []).map(c => {
@@ -1107,7 +895,7 @@
         };
       });
       renderCardList(extraListEl, normExtraCards, false);
-      extraCountEl.textContent = normExtraCards.length ? `(${normExtraCards.length}種)` : '';
+      extraCountEl.textContent = normExtraCards.length ? `(${normExtraCards.length})` : '';
 
       renderColonyShelter(item);
     }
@@ -1129,19 +917,9 @@
         return;
       }
 
-      // ランダムに1つ選択
       const randomIndex = Math.floor(Math.random() * playable.length);
       const chosen = playable[randomIndex];
-
-      // アニメーション効果
-      resultBoxEl.classList.add('animating');
-      setTimeout(() => {
-        // ドロップダウンを該当サプライに同期
-        updateSupplySelect(chosen.index);
-        resultBoxEl.classList.remove('animating');
-        // 結果表示位置にスムーズスクロール（モバイル配慮）
-        resultBoxEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 150);
+      updateSupplySelect(chosen.index);
     }
 
     async function init() {
@@ -1168,7 +946,7 @@
         // 拡張グリッド描画
         renderExpansionCheckboxes();
 
-        // クイック操作ボタンイベント
+        // 操作ボタンイベント
         btnSelectAllExp.addEventListener('click', () => {
           ownedExpansions = new Set(EXPANSION_DEFS.map(e => e.id));
           document.querySelectorAll('.exp-item input[type="checkbox"]').forEach(c => c.checked = true);
@@ -1184,7 +962,6 @@
         });
 
         btnSelectV2Exp.addEventListener('click', () => {
-          // 第二版および初版がない拡張を選択（最新の通常プレイ環境）
           const v2Ids = EXPANSION_DEFS
             .filter(e => !e.id.endsWith('_v1'))
             .map(e => e.id);
