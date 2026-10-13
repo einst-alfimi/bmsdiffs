@@ -2,67 +2,612 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>推奨サプライ選択ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>推奨サプライ選択ツール — ドミニオン</title>
   <style>
-    body { font-family: sans-serif; max-width: 640px; margin: 1rem auto; padding: 0 1rem; }
-    select { width: 100%; padding: 0.5rem; font-size: 1rem; }
-    .result { margin-top: 1rem; padding: 1rem; background: #f0f0f0; border-radius: 8px; }
-    .result h2 { margin-top: 0; }
-    .card-list { list-style: none; padding-left: 0; }
-    .card-list li { padding: 0.25rem 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; gap: 1rem; }
-    .card-list li:last-child { border-bottom: none; }
-    .card-set { color: #666; font-size: 0.9em; }
-    .card-types { font-size: 0.85em; color: #555; margin-right: auto; }
-    .colony-shelter { margin-top: 1rem; display: flex; gap: 2rem; }
-    .colony-shelter span { font-weight: bold; }
+    :root {
+      --primary-color: #2b5c8f;
+      --primary-hover: #1f4369;
+      --accent-color: #d97706;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --tag-bg: #e0e7ff;
+      --tag-color: #3730a3;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* アコーディオン */
+    details.panel {
+      padding: 0;
+    }
+    details.panel summary {
+      padding: 0.9rem 1.25rem;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+    details.panel summary::-webkit-details-marker { display: none; }
+    details.panel summary::after {
+      content: '▼';
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+    details[open].panel summary::after {
+      transform: rotate(180deg);
+    }
+    .panel-content {
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* 拡張セット選択グリッド */
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1rem;
+    }
+    .btn-sm {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border-color);
+      background: #f1f5f9;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: background 0.15s;
+    }
+    .btn-sm:hover { background: #e2e8f0; }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .exp-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.4rem;
+      border-radius: 4px;
+    }
+    .exp-item:hover { background: #f8fafc; }
+    .exp-item label {
+      cursor: pointer;
+      user-select: none;
+      flex: 1;
+    }
+
+    /* コントローラー & ランダムボタン */
+    .random-section {
+      text-align: center;
+      margin: 1.25rem 0;
+    }
+    .btn-random {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(37,99,235,0.3);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+    }
+    .btn-random:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px -1px rgba(37,99,235,0.4);
+    }
+    .btn-random:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px -1px rgba(37,99,235,0.3);
+    }
+    .btn-random:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .select-group {
+      margin-top: 1rem;
+    }
+    .select-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .filter-toggle {
+      font-size: 0.8rem;
+      font-weight: normal;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    select {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: #fff;
+      color: var(--text-color);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus {
+      border-color: var(--primary-color);
+    }
+
+    /* 結果表示エリア */
+    .result {
+      margin-top: 1.25rem;
+      padding: 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: opacity 0.2s ease;
+    }
+    .result.animating {
+      opacity: 0.4;
+    }
+    .supply-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .supply-name {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 0;
+    }
+    .supply-expansion {
+      font-size: 0.85rem;
+      background: var(--tag-bg);
+      color: var(--tag-color);
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+
+    .result h2 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid var(--border-color);
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .result h2 .count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+
+    .card-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .card-list li {
+      padding: 0.45rem 0.25rem;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .card-list li:last-child {
+      border-bottom: none;
+    }
+    .card-list li.empty-item {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .card-main {
+      font-weight: 600;
+      color: #0f172a;
+      flex: 1 1 200px;
+    }
+    .card-cost {
+      font-weight: normal;
+      color: #b45309;
+      font-size: 0.9em;
+      margin-left: 0.25rem;
+    }
+    .card-types {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      flex: 1 1 140px;
+      text-align: left;
+    }
+    .card-set {
+      color: #475569;
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      text-align: right;
+    }
+    .card-note {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-left: 0.25rem;
+      font-weight: normal;
+    }
+
+    .colony-shelter {
+      margin-top: 1.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+    .colony-shelter span {
+      font-weight: bold;
+      color: #334155;
+    }
+    .badge-yes {
+      color: #15803d;
+      font-weight: bold;
+    }
+    .badge-no {
+      color: var(--text-muted);
+    }
+
+    /* サプライ除外リスト */
+    .excluded-supplies-container {
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      background: #fff;
+    }
+    .supply-check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.4rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .supply-check-item:hover { background: #f8fafc; }
+    .supply-check-item label {
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+    }
+    .supply-check-item .supp-exp {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .badge-count {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-color);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body>
-  <h1>推奨サプライ一覧</h1>
-  <p>
-    <label for="supply-select">サプライ選択:</label><br>
-    <select id="supply-select" size="1"></select>
-  </p>
+  <h1>推奨サプライ選択ツール</h1>
+  <div class="subtitle">公式推奨サプライ 468種類に対応</div>
+
+  <!-- 所持拡張選択パネル -->
+  <details id="expansion-panel" class="panel">
+    <summary>
+      <span>📦 所持している拡張セットの選択</span>
+      <span id="owned-count-badge" class="badge-count">読み込み中...</span>
+    </summary>
+    <div class="panel-content">
+      <div class="button-row">
+        <button id="btn-select-all-exp" class="btn-sm" type="button">すべて選択</button>
+        <button id="btn-deselect-all-exp" class="btn-sm" type="button">すべて解除</button>
+        <button id="btn-select-v2-exp" class="btn-sm" type="button">第二版＋全拡張を選択</button>
+      </div>
+      <div id="expansion-grid" class="exp-grid"></div>
+    </div>
+  </details>
+
+  <!-- ランダム選択 & サプライ選択コントローラー -->
+  <div class="panel">
+    <div class="random-section">
+      <button id="btn-random" class="btn-random" type="button">
+        <span>🎲</span>
+        <span id="btn-random-text">ランダムにサプライを決める</span>
+      </button>
+      <div id="playable-status" style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"></div>
+    </div>
+
+    <div class="select-group">
+      <div class="select-header">
+        <label for="supply-select">サプライ選択:</label>
+        <label class="filter-toggle">
+          <input type="checkbox" id="chk-filter-playable" checked>
+          <span>所持サプライのみ表示</span>
+        </label>
+      </div>
+      <select id="supply-select"></select>
+    </div>
+
+    <!-- 個別除外設定アコーディオン -->
+    <details id="exclude-panel" style="margin-top: 1rem; font-size: 0.85rem;">
+      <summary style="cursor: pointer; color: var(--text-muted); user-select: none;">
+        <span>⚙️ 対象サプライの個別除外・確認 (<span id="eligible-supplies-count">0</span>件)</span>
+      </summary>
+      <div class="excluded-supplies-container" id="eligible-supplies-list"></div>
+    </details>
+  </div>
+
+  <!-- サプライ結果表示 -->
   <div id="cards-result" class="result">
-    <h2>王国カード</h2>
+    <div class="supply-title-row">
+      <h2 id="current-supply-name" class="supply-name">サプライ名</h2>
+      <span id="current-supply-exp" class="supply-expansion">拡張名</span>
+    </div>
+
+    <h2>王国カード <span class="count" id="kingdom-count"></span></h2>
     <ul id="kingdom-list" class="card-list"></ul>
-    <h2>追加カード</h2>
+
+    <h2>追加カード <span class="count" id="extra-count"></span></h2>
     <ul id="extra-list" class="card-list"></ul>
+
     <div id="colony-shelter" class="colony-shelter"></div>
   </div>
 
   <script type="module">
+    // --- 拡張の定義 ---
+    const EXPANSION_DEFS = [
+      { id: 'base_v1', name: '基本 (初版)', group: '基本' },
+      { id: 'base_v2', name: '基本 (第二版)', group: '基本' },
+      { id: 'intrigue_v1', name: '陰謀 (初版)', group: '陰謀' },
+      { id: 'intrigue_v2', name: '陰謀 (第二版)', group: '陰謀' },
+      { id: 'seaside_v1', name: '海辺 (初版)', group: '海辺' },
+      { id: 'seaside_v2', name: '海辺 (第二版)', group: '海辺' },
+      { id: 'alchemy', name: '錬金術', group: '錬金術' },
+      { id: 'prosperity_v1', name: '繁栄 (初版)', group: '繁栄' },
+      { id: 'prosperity_v2', name: '繁栄 (第二版)', group: '繁栄' },
+      { id: 'cornucopia', name: '収穫祭', group: '収穫祭' },
+      { id: 'hinterlands_v1', name: '異郷 (初版)', group: '異郷' },
+      { id: 'hinterlands_v2', name: '異郷 (第二版)', group: '異郷' },
+      { id: 'dark_ages', name: '暗黒時代', group: '暗黒時代' },
+      { id: 'guilds_v1', name: 'ギルド (初版)', group: 'ギルド' },
+      { id: 'guilds_v2', name: 'ギルド (第二版)', group: 'ギルド' },
+      { id: 'adventures', name: '冒険', group: '冒険' },
+      { id: 'empires', name: '帝国', group: '帝国' },
+      { id: 'nocturne', name: '夜想曲', group: '夜想曲' },
+      { id: 'renaissance', name: 'ルネサンス', group: 'ルネサンス' },
+      { id: 'menagerie', name: '移動動物園', group: '移動動物園' },
+      { id: 'allies', name: '同盟', group: '同盟' },
+      { id: 'plunder', name: '略奪', group: '略奪' },
+      { id: 'rising_sun', name: '旭日', group: '旭日' },
+    ];
+
+    // 初版限定（廃版）カード一覧
+    const V1_ONLY_CARDS = {
+      '基本': ['木こり', '泥棒', '宰相', '祝宴', '密偵', '冒険者'],
+      '陰謀': ['秘密の部屋', '大広間', '銅細工師', '偵察員', 'トリビュート', '破壊工作員'],
+      '海辺': ['抑留', '真珠採り', '海の妖婆', '探索', '海賊船', '幽霊船', '商船', '探検家'],
+      '繁栄': ['借金', '投機', '記念碑', '護符', '会計所', '行商人', '禁制品', 'ペテン師', '隠し財産', '望楼'],
+      '異郷': ['公爵領の敷地', '大使館', 'シルクロード', '遊牧民の野営地', 'よろずや', '神託', '義賊', '開発', '埋蔵金'],
+      'ギルド': ['名品', '収税吏', '医師', '預言者']
+    };
+
+    // 分割カード（Split Piles）の定義（帝国・プロモ）
+    const SPLIT_PILES = [
+      {
+        names: ['開拓者', '騒がしい村'],
+        mergedName: '開拓者 / 騒がしい村',
+        cost: '2 / 5',
+        type: 'アクション',
+        set: '帝国',
+        note: '開拓者(2) / 騒がしい村(5)'
+      },
+      {
+        names: ['パトリキ', 'エンポリウム'],
+        mergedName: 'パトリキ / エンポリウム',
+        cost: '2 / 5',
+        type: 'アクション',
+        set: '帝国',
+        note: 'パトリキ(2) / エンポリウム(5)'
+      },
+      {
+        names: ['投石機', '石'],
+        mergedName: '投石機 / 石',
+        cost: '3 / 4',
+        type: 'アクション－アタック / 財宝',
+        set: '帝国',
+        note: '投石機(3) / 石(4)'
+      },
+      {
+        names: ['陣地', '鹵獲品'],
+        mergedName: '陣地 / 鹵獲品',
+        cost: '2 / 5',
+        type: 'アクション / 財宝',
+        set: '帝国',
+        note: '陣地(2) / 鹵獲品(5)'
+      },
+      {
+        names: ['剣闘士', '大金'],
+        check: n => n === '剣闘士' || n.startsWith('大金'),
+        mergedName: '剣闘士 / 大金',
+        cost: '3 / 8+8D',
+        type: 'アクション / 財宝',
+        set: '帝国',
+        note: '剣闘士(3) / 大金(8+8負債)'
+      },
+      {
+        names: ['サウナ', 'アヴァント'],
+        mergedName: 'サウナ / アヴァント',
+        cost: '4 / 5',
+        type: 'アクション',
+        set: 'プロモ',
+        note: 'サウナ(4) / アヴァント(5)'
+      }
+    ];
+
+    // 特殊カード・辞書補完
+    const MANUAL_CARD_OVERRIDES = {
+      '城': {
+        name_ja: '城',
+        cost: '3〜10',
+        type: '勝利点－城',
+        set: '帝国',
+        note: '粗末な城(3), 崩れた城(4), 小さい城(5), 幽霊城(6), 華やかな城(7), 広大な城(8), 壮大な城(9), 王城(10)'
+      },
+      '騎士': {
+        name_ja: '騎士',
+        cost: '5',
+        type: 'アクション－アタック－騎士',
+        set: '暗黒時代',
+        note: 'デイム・アンナ〜サー・ヴァンデル(10種)'
+      },
+      'ハーレム': {
+        name_ja: 'ハーレム',
+        cost: '6',
+        type: '財宝－勝利点',
+        set: '陰謀'
+      },
+      '大金': {
+        name_ja: '大金',
+        cost: '8+8D',
+        type: '財宝',
+        set: '帝国'
+      },
+      // 同盟分割山札名
+      '町民': { name_ja: '町民', cost: '2〜5', type: 'アクション－町民', set: '同盟' },
+      '城砦': { name_ja: '城砦', cost: '3〜6', type: 'アクション－城砦', set: '同盟' },
+      '衝突': { name_ja: '衝突', cost: '3〜6', type: 'アクション－衝突', set: '同盟' },
+      '卜占官': { name_ja: '卜占官', cost: '3〜6', type: 'アクション－卜占官', set: '同盟' },
+      '魔法使い': { name_ja: '魔法使い', cost: '3〜6', type: 'アクション－魔法使い', set: '同盟' },
+      '叙事詩': { name_ja: '叙事詩', cost: '3〜6', type: 'アクション－叙事詩', set: '同盟' },
+      // 収穫祭＆ギルド第2版
+      'Infirmary': { name_ja: 'Infirmary', cost: '4', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Farmhands': { name_ja: 'Farmhands', cost: '4', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Carnival': { name_ja: 'Carnival', cost: '5', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Farrier': { name_ja: 'Farrier', cost: '2', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Shop': { name_ja: 'Shop', cost: '3', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Joust': { name_ja: 'Joust', cost: '5', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Ferryman': { name_ja: 'Ferryman', cost: '5', type: 'アクション', set: '収穫祭＆ギルド' },
+      'Footpad': { name_ja: 'Footpad', cost: '5', type: 'アクション－アタック', set: '収穫祭＆ギルド' },
+      '肖像': { name_ja: '肖像', cost: '5', type: 'アクション', set: '略奪' }
+    };
+
+    // LocalStorage キー
+    const STORAGE_KEY_OWNED = 'dominion_owned_expansions_v1';
+    const STORAGE_KEY_EXCLUDED = 'dominion_excluded_supplies_v1';
+    const STORAGE_KEY_FILTER_ONLY = 'dominion_filter_only_playable_v1';
+
+    // DOM要素
+    const expansionPanelEl = document.getElementById('expansion-panel');
+    const ownedCountBadgeEl = document.getElementById('owned-count-badge');
+    const expansionGridEl = document.getElementById('expansion-grid');
+    const btnSelectAllExp = document.getElementById('btn-select-all-exp');
+    const btnDeselectAllExp = document.getElementById('btn-deselect-all-exp');
+    const btnSelectV2Exp = document.getElementById('btn-select-v2-exp');
+
+    const btnRandomEl = document.getElementById('btn-random');
+    const btnRandomTextEl = document.getElementById('btn-random-text');
+    const playableStatusEl = document.getElementById('playable-status');
+    const chkFilterPlayableEl = document.getElementById('chk-filter-playable');
     const selectEl = document.getElementById('supply-select');
+
+    const eligibleSuppliesCountEl = document.getElementById('eligible-supplies-count');
+    const eligibleSuppliesListEl = document.getElementById('eligible-supplies-list');
+
+    const resultBoxEl = document.getElementById('cards-result');
+    const currentSupplyNameEl = document.getElementById('current-supply-name');
+    const currentSupplyExpEl = document.getElementById('current-supply-exp');
     const kingdomListEl = document.getElementById('kingdom-list');
     const extraListEl = document.getElementById('extra-list');
+    const kingdomCountEl = document.getElementById('kingdom-count');
+    const extraCountEl = document.getElementById('extra-count');
     const colonyShelterEl = document.getElementById('colony-shelter');
+
+    // アプリケーション状態
+    let supplyList = [];
+    let cardDataLookup = new Map();
+    let ownedExpansions = new Set();
+    let excludedSupplyKeys = new Set();
+    let filterOnlyPlayable = true;
 
     function normalizeName(s) {
       if (!s || typeof s !== 'string') return '';
       return s.trim();
-    }
-
-    /** dominion_cards.json から カード名(日本語) -> カードデータ の Map を構築 */
-    function buildCardDataLookup(dominionCardsData) {
-      const map = new Map();
-      if (!dominionCardsData?.cards) return map;
-      for (const c of dominionCardsData.cards) {
-        const nameJa = normalizeName(c.name_ja ?? '');
-        if (nameJa && !map.has(nameJa)) map.set(nameJa, c);
-      }
-      return map;
-    }
-
-    function getSetForCardName(cardName, cardDataLookup) {
-      if (!cardName || !cardDataLookup) return '—';
-      const card = cardDataLookup.get(normalizeName(cardName));
-      return card?.set ?? '—';
-    }
-
-    function getTypeForCardName(cardName, cardDataLookup) {
-      if (!cardName || !cardDataLookup) return '';
-      const card = cardDataLookup.get(normalizeName(cardName));
-      return card?.type ?? '';
     }
 
     function escapeHtml(s) {
@@ -72,25 +617,447 @@
       return div.innerHTML;
     }
 
-    function renderCardList(listEl, cards, cardDataLookup) {
+    function getSupplyKey(supply) {
+      return `${supply.expansion}::${supply.name}`;
+    }
+
+    /** カード情報 Lookup 構築 */
+    function buildCardDataLookup(dominionCardsData) {
+      const map = new Map();
+      if (!dominionCardsData || !dominionCardsData.cards) return map;
+      for (const c of dominionCardsData.cards) {
+        const nameJa = normalizeName(c.name_ja != null ? c.name_ja : '');
+        if (nameJa && !map.has(nameJa)) map.set(nameJa, c);
+      }
+      return map;
+    }
+
+    /** カード情報（セット、タイプ、コスト等）の解決 */
+    function resolveCardInfo(rawCardName, lookup) {
+      let name = normalizeName(rawCardName);
+      if (name.startsWith('大金(')) name = '大金';
+      if (name.endsWith('(5)')) name = name.replace('(5)', '').trim();
+
+      if (MANUAL_CARD_OVERRIDES[name]) {
+        return MANUAL_CARD_OVERRIDES[name];
+      }
+      if (lookup.has(name)) {
+        return lookup.get(name);
+      }
+
+      // 特性付きカードのフォールバック（例: "近隣の パトリキ" -> "パトリキ"）
+      if (name.includes(' ')) {
+        const parts = name.split(/\s+/);
+        const baseName = parts[parts.length - 1];
+        if (lookup.has(baseName)) {
+          const parent = lookup.get(baseName);
+          return { ...parent, name_ja: name };
+        }
+      }
+
+      // 恵み
+      if (name.includes('恵み')) {
+        return { name_ja: name, type: '恵み', set: '夜想曲' };
+      }
+
+      return null;
+    }
+
+    /**
+     * 王国カードの正規化（城など1サプライに複数種類ある分割カードを1行にマージ）
+     */
+    function normalizeKingdomCards(rawCards, lookup) {
+      if (!rawCards || !rawCards.length) return [];
+      let list = rawCards.map(c => {
+        const info = resolveCardInfo(c.name, lookup);
+        return {
+          name: c.name,
+          cost: c.cost != null ? c.cost : (info && info.cost != null ? info.cost : ''),
+          type: info && info.type != null ? info.type : '',
+          set: info && info.set != null ? info.set : '—',
+          note: info && info.note != null ? info.note : '',
+          raw: c
+        };
+      });
+
+      // 城（Castles）の特別正規化
+      list = list.map(card => {
+        if (card.name === '城') {
+          return {
+            name: '城',
+            cost: '3〜10',
+            type: '勝利点－城',
+            set: '帝国',
+            note: '粗末な城〜王城（8種）',
+            raw: card.raw
+          };
+        }
+        if (card.name === '騎士') {
+          return {
+            name: '騎士',
+            cost: '5',
+            type: 'アクション－アタック－騎士',
+            set: '暗黒時代',
+            note: 'デイム・アンナ〜サー・ヴァンデル（10種）',
+            raw: card.raw
+          };
+        }
+        return card;
+      });
+
+      // 帝国の分割カードペアを1行にマージ
+      for (const pair of SPLIT_PILES) {
+        const matchIndices = [];
+        list.forEach((c, idx) => {
+          const isMatch = pair.check ? pair.check(c.name) : pair.names.includes(c.name);
+          if (isMatch) matchIndices.push(idx);
+        });
+
+        if (matchIndices.length >= 2) {
+          const firstIdx = matchIndices[0];
+          const mergedCard = {
+            name: pair.mergedName,
+            cost: pair.cost,
+            type: pair.type,
+            set: pair.set,
+            note: pair.note,
+            isSplit: true
+          };
+          // 最初のカード位置を統合カードにし、残りのインデックスのカードをリストから除外
+          const removeSet = new Set(matchIndices.slice(1));
+          list = list.filter((_, idx) => !removeSet.has(idx));
+          list[firstIdx] = mergedCard;
+        }
+      }
+
+      return list;
+    }
+
+    /**
+     * サプライが所持拡張でプレイ可能か判定する
+     */
+    function canPlaySupply(supply, owned) {
+      const parts = supply.expansion.split('+').map(p => p.replace(/のみ$/, '').trim());
+      const kingdomCardNames = (supply.kingdom_cards || []).map(c => c.name);
+
+      for (const part of parts) {
+        if (part === '基本(初版)') {
+          if (!owned.has('base_v1')) return false;
+        } else if (part === '基本(第二版)') {
+          if (!owned.has('base_v2')) return false;
+        } else if (part === '基本') {
+          const hasV1 = owned.has('base_v1');
+          const hasV2 = owned.has('base_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            // 初版限定カードを含む場合はv1が必要
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['基本'].includes(n))) return false;
+          }
+        } else if (part === '陰謀(初版)') {
+          if (!owned.has('intrigue_v1')) return false;
+        } else if (part === '陰謀(第二版)') {
+          if (!owned.has('intrigue_v2')) return false;
+        } else if (part === '陰謀') {
+          const hasV1 = owned.has('intrigue_v1');
+          const hasV2 = owned.has('intrigue_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['陰謀'].includes(n))) return false;
+          }
+        } else if (part === '海辺(初版)') {
+          if (!owned.has('seaside_v1')) return false;
+        } else if (part === '海辺(第二版)') {
+          if (!owned.has('seaside_v2')) return false;
+        } else if (part === '海辺') {
+          const hasV1 = owned.has('seaside_v1');
+          const hasV2 = owned.has('seaside_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['海辺'].includes(n))) return false;
+          }
+        } else if (part === '繁栄(第二版)') {
+          if (!owned.has('prosperity_v2')) return false;
+        } else if (part === '繁栄') {
+          const hasV1 = owned.has('prosperity_v1');
+          const hasV2 = owned.has('prosperity_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['繁栄'].includes(n))) return false;
+          }
+        } else if (part === '異郷(第二版)') {
+          if (!owned.has('hinterlands_v2')) return false;
+        } else if (part === '異郷') {
+          const hasV1 = owned.has('hinterlands_v1');
+          const hasV2 = owned.has('hinterlands_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['異郷'].includes(n))) return false;
+          }
+        } else if (part === 'ギルド(第二版)') {
+          if (!owned.has('guilds_v2')) return false;
+        } else if (part === 'ギルド') {
+          const hasV1 = owned.has('guilds_v1');
+          const hasV2 = owned.has('guilds_v2');
+          if (!hasV1 && !hasV2) return false;
+          if (!hasV1 && hasV2) {
+            if (kingdomCardNames.some(n => V1_ONLY_CARDS['ギルド'].includes(n))) return false;
+          }
+        } else if (part === '錬金術') {
+          if (!owned.has('alchemy')) return false;
+        } else if (part === '収穫祭') {
+          if (!owned.has('cornucopia')) return false;
+        } else if (part === '暗黒時代') {
+          if (!owned.has('dark_ages')) return false;
+        } else if (part === '冒険') {
+          if (!owned.has('adventures')) return false;
+        } else if (part === '帝国') {
+          if (!owned.has('empires')) return false;
+        } else if (part === '夜想曲') {
+          if (!owned.has('nocturne')) return false;
+        } else if (part === 'ルネサンス') {
+          if (!owned.has('renaissance')) return false;
+        } else if (part === '移動動物園') {
+          if (!owned.has('menagerie')) return false;
+        } else if (part === '同盟') {
+          if (!owned.has('allies')) return false;
+        } else if (part === '略奪') {
+          if (!owned.has('plunder')) return false;
+        } else if (part === '旭日') {
+          if (!owned.has('rising_sun')) return false;
+        }
+      }
+      return true;
+    }
+
+    /** プレイ可能＆除外されていないサプライリストの取得 */
+    function getPlayableSupplies() {
+      return supplyList
+        .map((s, index) => ({ supply: s, index, key: getSupplyKey(s) }))
+        .filter(item => canPlaySupply(item.supply, ownedExpansions))
+        .filter(item => !excludedSupplyKeys.has(item.key));
+    }
+
+    /** 所持拡張の保存と読み込み */
+    function loadSavedState() {
+      try {
+        const savedOwned = localStorage.getItem(STORAGE_KEY_OWNED);
+        if (savedOwned) {
+          const arr = JSON.parse(savedOwned);
+          ownedExpansions = new Set(arr);
+        } else {
+          // デフォルト: すべて所持
+          ownedExpansions = new Set(EXPANSION_DEFS.map(e => e.id));
+        }
+
+        const savedExcluded = localStorage.getItem(STORAGE_KEY_EXCLUDED);
+        if (savedExcluded) {
+          excludedSupplyKeys = new Set(JSON.parse(savedExcluded));
+        }
+
+        const savedFilterOnly = localStorage.getItem(STORAGE_KEY_FILTER_ONLY);
+        if (savedFilterOnly !== null) {
+          filterOnlyPlayable = savedFilterOnly === 'true';
+          chkFilterPlayableEl.checked = filterOnlyPlayable;
+        }
+      } catch (err) {
+        console.error('Failed to load localStorage', err);
+        ownedExpansions = new Set(EXPANSION_DEFS.map(e => e.id));
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY_OWNED, JSON.stringify(Array.from(ownedExpansions)));
+        localStorage.setItem(STORAGE_KEY_EXCLUDED, JSON.stringify(Array.from(excludedSupplyKeys)));
+        localStorage.setItem(STORAGE_KEY_FILTER_ONLY, String(filterOnlyPlayable));
+      } catch (err) {
+        console.error('Failed to save state to localStorage', err);
+      }
+    }
+
+    /** 所持拡張チェックボックスの描画 */
+    function renderExpansionCheckboxes() {
+      expansionGridEl.innerHTML = '';
+      EXPANSION_DEFS.forEach(exp => {
+        const div = document.createElement('div');
+        div.className = 'exp-item';
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.id = `exp-${exp.id}`;
+        chk.checked = ownedExpansions.has(exp.id);
+        chk.addEventListener('change', () => {
+          if (chk.checked) {
+            ownedExpansions.add(exp.id);
+          } else {
+            ownedExpansions.delete(exp.id);
+          }
+          saveState();
+          onExpansionChange();
+        });
+
+        const lbl = document.createElement('label');
+        lbl.htmlFor = `exp-${exp.id}`;
+        lbl.textContent = exp.name;
+
+        div.appendChild(chk);
+        div.appendChild(lbl);
+        expansionGridEl.appendChild(div);
+      });
+
+      updateOwnedCountBadge();
+    }
+
+    function updateOwnedCountBadge() {
+      const count = ownedExpansions.size;
+      const total = EXPANSION_DEFS.length;
+      ownedCountBadgeEl.textContent = `${count} / ${total} 選択中`;
+    }
+
+    /** サプライ選択ドロップダウンの更新 */
+    function updateSupplySelect(selectedRawIndex = null) {
+      const prevVal = selectedRawIndex !== null ? selectedRawIndex : parseInt(selectEl.value, 10);
+      selectEl.innerHTML = '';
+
+      const itemsToShow = [];
+      supplyList.forEach((item, i) => {
+        const isPlayable = canPlaySupply(item, ownedExpansions);
+        const isExcluded = excludedSupplyKeys.has(getSupplyKey(item));
+
+        if (!filterOnlyPlayable || (isPlayable && !isExcluded)) {
+          itemsToShow.push({
+            rawIndex: i,
+            label: `${item.expansion} — ${item.name}`,
+            isPlayable,
+            isExcluded
+          });
+        }
+      });
+
+      if (itemsToShow.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = '（該当するサプライがありません。所持拡張を選択してください）';
+        selectEl.appendChild(opt);
+        selectEl.disabled = true;
+        btnRandomEl.disabled = true;
+        renderEmptySupply();
+        return;
+      }
+
+      selectEl.disabled = false;
+      btnRandomEl.disabled = false;
+
+      let foundPrev = false;
+      itemsToShow.forEach(it => {
+        const opt = document.createElement('option');
+        opt.value = it.rawIndex;
+        opt.textContent = it.label;
+        if (it.rawIndex === prevVal) {
+          opt.selected = true;
+          foundPrev = true;
+        }
+        selectEl.appendChild(opt);
+      });
+
+      if (!foundPrev && itemsToShow.length > 0) {
+        selectEl.value = itemsToShow[0].rawIndex;
+      }
+
+      onSelectChange();
+    }
+
+    /** 対象サプライ個別除外リストの更新 */
+    function updateEligibleSuppliesList() {
+      const eligible = supplyList
+        .map((s, idx) => ({ supply: s, index: idx, key: getSupplyKey(s) }))
+        .filter(item => canPlaySupply(item.supply, ownedExpansions));
+
+      eligibleSuppliesCountEl.textContent = eligible.length;
+      eligibleSuppliesListEl.innerHTML = '';
+
+      if (eligible.length === 0) {
+        eligibleSuppliesListEl.innerHTML = '<div style="color:var(--text-muted); padding:0.5rem;">該当するサプライがありません。</div>';
+        return;
+      }
+
+      eligible.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'supply-check-item';
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.id = `supp-chk-${item.index}`;
+        // チェックが入っている＝有効（除外されていない）
+        chk.checked = !excludedSupplyKeys.has(item.key);
+
+        chk.addEventListener('change', () => {
+          if (chk.checked) {
+            excludedSupplyKeys.delete(item.key);
+          } else {
+            excludedSupplyKeys.add(item.key);
+          }
+          saveState();
+          updatePlayableStatus();
+          updateSupplySelect();
+        });
+
+        const lbl = document.createElement('label');
+        lbl.htmlFor = `supp-chk-${item.index}`;
+        lbl.innerHTML = `<span>${escapeHtml(item.supply.name)}</span><span class="supp-exp">${escapeHtml(item.supply.expansion)}</span>`;
+
+        row.appendChild(chk);
+        row.appendChild(lbl);
+        eligibleSuppliesListEl.appendChild(row);
+      });
+    }
+
+    function updatePlayableStatus() {
+      const playable = getPlayableSupplies();
+      const totalEligible = supplyList.filter(s => canPlaySupply(s, ownedExpansions)).length;
+      playableStatusEl.textContent = `🎲 ランダム抽選対象: ${playable.length} 件 （所持可能: ${totalEligible}件 / 全${supplyList.length}件）`;
+      btnRandomTextEl.textContent = playable.length > 0 
+        ? `ランダムにサプライを決める (${playable.length}件から)` 
+        : `所持サプライがありません`;
+      btnRandomEl.disabled = playable.length === 0;
+    }
+
+    function onExpansionChange() {
+      updateOwnedCountBadge();
+      updatePlayableStatus();
+      updateEligibleSuppliesList();
+      updateSupplySelect();
+    }
+
+    /** カードリストの描画 */
+    function renderCardList(listEl, cards, isKingdom = true) {
       listEl.innerHTML = '';
-      if (!cards?.length) {
+      if (!cards || !cards.length) {
         const li = document.createElement('li');
+        li.className = 'empty-item';
         li.textContent = '（なし）';
         listEl.appendChild(li);
         return;
       }
-      const sortedCards = [...cards].sort((a, b) => {
-        const setA = getSetForCardName(a.name, cardDataLookup);
-        const setB = getSetForCardName(b.name, cardDataLookup);
-        return setA.localeCompare(setB, 'ja');
-      });
+
+      // セット名順にソート（王国カードの場合）
+      const sortedCards = isKingdom
+        ? [...cards].sort((a, b) => (a.set || '').localeCompare(b.set || '', 'ja'))
+        : [...cards];
 
       for (const card of sortedCards) {
-        const set = getSetForCardName(card.name, cardDataLookup);
-        const type = getTypeForCardName(card.name, cardDataLookup);
         const li = document.createElement('li');
-        li.innerHTML = `<span>${escapeHtml(card.name)}${card.cost ? ` (${escapeHtml(card.cost)})` : ''}</span><span class="card-types">${escapeHtml(type)}</span><span class="card-set">${escapeHtml(set)}</span>`;
+        const costStr = card.cost ? ` (${escapeHtml(card.cost)})` : '';
+        const noteStr = card.note ? `<span class="card-note" title="${escapeHtml(card.note)}">ℹ️</span>` : '';
+
+        li.innerHTML = `
+          <span class="card-main">${escapeHtml(card.name)}${costStr}${noteStr}</span>
+          <span class="card-types">${escapeHtml(card.type || '')}</span>
+          <span class="card-set">${escapeHtml(card.set || '—')}</span>
+        `;
+        if (card.note) {
+          li.title = card.note;
+        }
         listEl.appendChild(li);
       }
     }
@@ -99,43 +1066,159 @@
       const colony = item.colony === true;
       const shelter = item.shelter === true;
       colonyShelterEl.innerHTML = `
-        <div><span>植民地/プラチナ:</span> ${colony ? '使用' : '不使用'}</div>
-        <div><span>避難所:</span> ${shelter ? '使用' : '不使用'}</div>
+        <div><span>植民地/プラチナ:</span> <span class="${colony ? 'badge-yes' : 'badge-no'}">${colony ? '使用' : '不使用'}</span></div>
+        <div><span>避難所:</span> <span class="${shelter ? 'badge-yes' : 'badge-no'}">${shelter ? '使用' : '不使用'}</span></div>
       `;
     }
 
-    async function init() {
-      const [listRes, cardsRes] = await Promise.all([
-        fetch('supply_list.json'),
-        fetch('dominion_cards.json'),
-      ]);
-      if (!listRes.ok || !cardsRes.ok) {
-        selectEl.innerHTML = '<option>JSON の読み込みに失敗しました（ローカルで開く場合はサーバーが必要です）</option>';
+    function renderEmptySupply() {
+      currentSupplyNameEl.textContent = '—';
+      currentSupplyExpEl.textContent = '—';
+      kingdomListEl.innerHTML = '<li class="empty-item">サプライが選択されていません</li>';
+      extraListEl.innerHTML = '<li class="empty-item">（なし）</li>';
+      kingdomCountEl.textContent = '';
+      extraCountEl.textContent = '';
+      colonyShelterEl.innerHTML = '';
+    }
+
+    function renderSupplyDetail(item) {
+      if (!item) {
+        renderEmptySupply();
         return;
       }
-      const supplyListData = await listRes.json();
-      const dominionCardsData = await cardsRes.json();
-      const cardDataLookup = buildCardDataLookup(dominionCardsData);
-      const supplyList = supplyListData.supplies ?? [];
 
-      supplyList.forEach((item, i) => {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `${item.expansion} — ${item.name}`;
-        selectEl.appendChild(opt);
+      currentSupplyNameEl.textContent = item.name;
+      currentSupplyExpEl.textContent = item.expansion;
+
+      // 王国カードの正規化（城や分割カードを1行化）
+      const normKingdomCards = normalizeKingdomCards(item.kingdom_cards || [], cardDataLookup);
+      renderCardList(kingdomListEl, normKingdomCards, true);
+      kingdomCountEl.textContent = `(${normKingdomCards.length}サプライ)`;
+
+      // 追加カードの正規化
+      const normExtraCards = (item.extra_cards || []).map(c => {
+        const info = resolveCardInfo(c.name, cardDataLookup);
+        return {
+          name: c.name,
+          cost: c.cost != null ? c.cost : (info && info.cost != null ? info.cost : ''),
+          type: info && info.type != null ? info.type : '',
+          set: info && info.set != null ? info.set : '—',
+          note: info && info.note != null ? info.note : ''
+        };
       });
+      renderCardList(extraListEl, normExtraCards, false);
+      extraCountEl.textContent = normExtraCards.length ? `(${normExtraCards.length}種)` : '';
 
-      function update() {
-        const index = parseInt(selectEl.value, 10);
-        const item = supplyList[index];
-        if (!item) return;
-        renderCardList(kingdomListEl, item.kingdom_cards ?? [], cardDataLookup);
-        renderCardList(extraListEl, item.extra_cards ?? [], cardDataLookup);
-        renderColonyShelter(item);
+      renderColonyShelter(item);
+    }
+
+    function onSelectChange() {
+      const rawIndex = parseInt(selectEl.value, 10);
+      if (isNaN(rawIndex) || !supplyList[rawIndex]) {
+        renderEmptySupply();
+        return;
+      }
+      renderSupplyDetail(supplyList[rawIndex]);
+    }
+
+    /** ランダムにサプライを決定 */
+    function pickRandomSupply() {
+      const playable = getPlayableSupplies();
+      if (playable.length === 0) {
+        alert('現在抽選可能なサプライがありません。所持拡張を選択するか、除外を解除してください。');
+        return;
       }
 
-      selectEl.addEventListener('change', update);
-      update();
+      // ランダムに1つ選択
+      const randomIndex = Math.floor(Math.random() * playable.length);
+      const chosen = playable[randomIndex];
+
+      // アニメーション効果
+      resultBoxEl.classList.add('animating');
+      setTimeout(() => {
+        // ドロップダウンを該当サプライに同期
+        updateSupplySelect(chosen.index);
+        resultBoxEl.classList.remove('animating');
+        // 結果表示位置にスムーズスクロール（モバイル配慮）
+        resultBoxEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
+    }
+
+    async function init() {
+      try {
+        const [listRes, cardsRes] = await Promise.all([
+          fetch('supply_list.json'),
+          fetch('dominion_cards.json'),
+        ]);
+
+        if (!listRes.ok || !cardsRes.ok) {
+          selectEl.innerHTML = '<option>JSON の読み込みに失敗しました（Webサーバー経由で開いてください）</option>';
+          return;
+        }
+
+        const supplyListData = await listRes.json();
+        const dominionCardsData = await cardsRes.json();
+
+        supplyList = supplyListData.supplies || [];
+        cardDataLookup = buildCardDataLookup(dominionCardsData);
+
+        // 保存された状態をロード
+        loadSavedState();
+
+        // 拡張グリッド描画
+        renderExpansionCheckboxes();
+
+        // クイック操作ボタンイベント
+        btnSelectAllExp.addEventListener('click', () => {
+          ownedExpansions = new Set(EXPANSION_DEFS.map(e => e.id));
+          document.querySelectorAll('.exp-item input[type="checkbox"]').forEach(c => c.checked = true);
+          saveState();
+          onExpansionChange();
+        });
+
+        btnDeselectAllExp.addEventListener('click', () => {
+          ownedExpansions.clear();
+          document.querySelectorAll('.exp-item input[type="checkbox"]').forEach(c => c.checked = false);
+          saveState();
+          onExpansionChange();
+        });
+
+        btnSelectV2Exp.addEventListener('click', () => {
+          // 第二版および初版がない拡張を選択（最新の通常プレイ環境）
+          const v2Ids = EXPANSION_DEFS
+            .filter(e => !e.id.endsWith('_v1'))
+            .map(e => e.id);
+          ownedExpansions = new Set(v2Ids);
+          document.querySelectorAll('.exp-item input[type="checkbox"]').forEach(chk => {
+            const id = chk.id.replace('exp-', '');
+            chk.checked = ownedExpansions.has(id);
+          });
+          saveState();
+          onExpansionChange();
+        });
+
+        // フィルタトグル
+        chkFilterPlayableEl.addEventListener('change', () => {
+          filterOnlyPlayable = chkFilterPlayableEl.checked;
+          saveState();
+          updateSupplySelect();
+        });
+
+        // サプライ選択変更
+        selectEl.addEventListener('change', onSelectChange);
+
+        // ランダムボタン
+        btnRandomEl.addEventListener('click', pickRandomSupply);
+
+        // 初期描画
+        updatePlayableStatus();
+        updateEligibleSuppliesList();
+        updateSupplySelect();
+
+      } catch (err) {
+        console.error('Init error:', err);
+        selectEl.innerHTML = '<option>データの初期化中にエラーが発生しました</option>';
+      }
     }
 
     init();
